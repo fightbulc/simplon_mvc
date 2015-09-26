@@ -5,7 +5,7 @@
                          J \               '.
                           L \             _.-+
                           |  '.       _.-"   |
-                          J    \  _.-"       L    Simplon Frontend
+                          J    \  _.-"       L    Simplon MVC
                            L    +"          J
                            +    |           |
                             \   |          .+
