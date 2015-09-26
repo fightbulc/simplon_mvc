@@ -1,0 +1,43 @@
+{
+  "name": "simplon/mvc",
+  "description": "Strongly opinionated MVC framework for rapid development",
+  "homepage": "https://github.com/fightbulc/simplon_mvc",
+  "type": "library",
+  "keywords": [
+    "mvc",
+    "model",
+    "view",
+    "controller",
+    "templates",
+    "router",
+    "mustache",
+    "locales",
+    "i18n",
+    "fast",
+    "lightweight",
+    "form"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tino Ehrich",
+      "email": "tino@bigpun.me",
+      "role": "developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.6",
+    "simplon/helper": "0.11.*",
+    "simplon/request": "1.0.*",
+    "simplon/mysql": "0.7.*",
+    "simplon/locale": "0.1.*",
+    "simplon/template": "0.5.*",
+    "simplon/error": "0.2.*",
+    "simplon/form": "0.6.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Simplon\\Mvc\\": "src/"
+    }
+  }
+}
