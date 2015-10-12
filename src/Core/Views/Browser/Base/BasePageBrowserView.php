@@ -3,8 +3,8 @@
 namespace Simplon\Mvc\Core\Views\Browser\Base;
 
 use Simplon\Mvc\App\Constants\AssetsConstants;
-use Simplon\Mvc\Core\Views\BrowserView;
-use Simplon\Mvc\Core\Views\PageBrowserViewHelper;
+use Simplon\Mvc\Core\Views\Browser\BrowserView;
+use Simplon\Mvc\Core\Views\Browser\Helper\PageBrowserViewHelper;
 
 /**
  * Class BasePageBrowserView

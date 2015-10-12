@@ -1,15 +1,16 @@
 <?php
 
-namespace Simplon\Mvc\Core\Views;
+namespace Simplon\Mvc\Core\Views\Browser;
 
 use Simplon\Mvc\Core\Interfaces\BrowserViewInterface;
 use Simplon\Mvc\Core\Interfaces\DataInterface;
 use Simplon\Mvc\Core\Utils\CastAway;
+use Simplon\Mvc\Core\Views\Browser\Helper\PageBrowserViewHelper;
 use Simplon\Template\Template;
 
 /**
  * Class BrowserView
- * @package Simplon\Mvc\Core\Views
+ * @package Simplon\Mvc\Core\Views\Browser
  */
 abstract class BrowserView implements BrowserViewInterface
 {

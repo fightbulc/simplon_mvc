@@ -3,7 +3,7 @@
 namespace Simplon\Mvc\App\Views\Browser\Backoffice;
 
 use Simplon\Mvc\Core\Views\Browser\Base\BasePageBrowserView;
-use Simplon\Mvc\Core\Views\PageBrowserViewHelper;
+use Simplon\Mvc\Core\Views\Browser\Helper\PageBrowserViewHelper;
 
 /**
  * Class BackofficeBasePageBrowserView

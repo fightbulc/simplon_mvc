@@ -6,7 +6,7 @@ use Simplon\Mvc\App\Context;
 use Simplon\Mvc\Core\Interfaces\BrowserViewInterface;
 use Simplon\Mvc\Core\Responses\BrowserRedirect;
 use Simplon\Mvc\Core\Responses\BrowserResponse;
-use Simplon\Mvc\Core\Views\FlashMessage;
+use Simplon\Mvc\Core\Views\Browser\FlashMessage;
 
 /**
  * Class BrowserController

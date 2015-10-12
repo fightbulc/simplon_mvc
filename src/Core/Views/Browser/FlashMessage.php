@@ -1,12 +1,12 @@
 <?php
 
-namespace Simplon\Mvc\Core\Views;
+namespace Simplon\Mvc\Core\Views\Browser;
 
 use Simplon\Mvc\Core\Interfaces\SessionStorageInterface;
 
 /**
  * Class FlashMessage
- * @package Simplon\Mvc\Core\Views
+ * @package Simplon\Mvc\Core\Views\Browser
  */
 class FlashMessage
 {

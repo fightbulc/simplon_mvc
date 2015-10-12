@@ -4,7 +4,7 @@ namespace Simplon\Mvc\App\Views\Browser\Backoffice\Auth;
 
 use Simplon\Mvc\App\Data\SampleData;
 use Simplon\Mvc\App\Views\Browser\Backoffice\BackofficeBasePageBrowserView;
-use Simplon\Mvc\Core\Views\PageBrowserViewHelper;
+use Simplon\Mvc\Core\Views\Browser\Helper\PageBrowserViewHelper;
 
 /**
  * Class AuthLoginBrowserView

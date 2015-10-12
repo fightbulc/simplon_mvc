@@ -1,13 +1,13 @@
 <?php
 
-namespace Simplon\Mvc\Core\Views;
+namespace Simplon\Mvc\Core\Views\Rest;
 
 use Simplon\Mvc\Core\Interfaces\DataInterface;
 use Simplon\Mvc\Core\Interfaces\RestViewInterface;
 
 /**
  * Class RestView
- * @package Simplon\Mvc\Core\Views
+ * @package Simplon\Mvc\Core\Views\Rest
  */
 abstract class RestView implements RestViewInterface
 {

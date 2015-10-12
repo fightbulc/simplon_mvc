@@ -67,7 +67,7 @@ $errorObserver = new ErrorObserver(
 
 if (getenv('APP_ENV') === 'production')
 {
-    $errorObserver->setPathErrorTemplate(__DIR__ . '/../src/Core/Views/Templates/error-production.phtml');
+    $errorObserver->setPathErrorTemplate(__DIR__ . '/../src/Core/Views/Browser/Error/ErrorProductionPageTemplate.phtml');
 }
 
 $errorObserver->addCallback(

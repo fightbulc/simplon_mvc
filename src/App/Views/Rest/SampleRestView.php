@@ -3,7 +3,7 @@
 namespace Simplon\Mvc\App\Views\Rest;
 
 use Simplon\Mvc\App\Data\SampleData;
-use Simplon\Mvc\Core\Views\RestView;
+use Simplon\Mvc\Core\Views\Rest\RestView;
 
 /**
  * Class SampleRestView
