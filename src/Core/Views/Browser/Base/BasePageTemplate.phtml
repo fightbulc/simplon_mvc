@@ -1,0 +1,44 @@
+<?php
+/**
+ * @var FlashMessage $flash
+ * @var Locale $trans
+ *
+ * @var string $cssVendor
+ * @var string $cssPage
+ * @var string $cssPartial
+ * @var string $codeBefore
+ * @var string $jsVendor
+ * @var string $jsPage
+ * @var string $jsPartial
+ * @var string $codeAfter
+ *
+ * @var string $partialModule
+ */
+use Simplon\Locale\Locale;
+use Simplon\Mvc\Core\Views\FlashMessage;
+
+?>
+<!DOCTYPE html>
+<html lang="<?= $trans->getCurrentLocale() ?>">
+<head>
+    <meta charset="UTF-8">
+    <title><?= $trans->get('base', 'page-title') ?></title>
+
+    <?php foreach (['cssVendor', 'cssPage', 'cssPartial'] as $block): ?>
+        <?php if (isset($$block)): ?>
+            <?= $$block ?>
+        <?php endif ?>
+    <?php endforeach ?>
+</head>
+<body>
+    <div id="app-module">
+        <?= $partialModule ?>
+    </div>
+
+    <?php foreach (['codeBefore', 'jsVendor', 'jsPage', 'jsPartial', 'codeAfter'] as $block): ?>
+        <?php if (isset($$block)): ?>
+            <?= $$block ?>
+        <?php endif ?>
+    <?php endforeach ?>
+</body>
+</html>

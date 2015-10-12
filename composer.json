@@ -27,13 +27,13 @@
   ],
   "require": {
     "php": ">=5.6",
-    "simplon/helper": "0.11.*",
     "simplon/request": "1.0.*",
-    "simplon/mysql": "0.7.*",
+    "simplon/mysql": "1.0.*",
     "simplon/locale": "0.1.*",
-    "simplon/template": "0.5.*",
-    "simplon/error": "0.2.*",
-    "simplon/form": "0.6.*"
+    "simplon/template": "0.6.*",
+    "simplon/error": "0.3.*",
+    "simplon/form": "0.6.*",
+    "robmorgan/phinx": "0.4.*"
   },
   "autoload": {
     "psr-4": {

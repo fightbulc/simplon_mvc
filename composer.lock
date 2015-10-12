@@ -4,64 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "debe446fb0109eb8fd8281bdaccbe1b4",
+    "hash": "d40a80419f01cacf418e77825a69b7b2",
+    "content-hash": "ff7f2de5aeea3f4d528ae8a564722821",
     "packages": [
-        {
-            "name": "danielstjules/stringy",
-            "version": "1.9.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/danielstjules/Stringy.git",
-                "reference": "3cf18e9e424a6dedc38b7eb7ef580edb0929461b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/danielstjules/Stringy/zipball/3cf18e9e424a6dedc38b7eb7ef580edb0929461b",
-                "reference": "3cf18e9e424a6dedc38b7eb7ef580edb0929461b",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Stringy\\": "src/"
-                },
-                "files": [
-                    "src/Create.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Daniel St. Jules",
-                    "email": "danielst.jules@gmail.com",
-                    "homepage": "http://www.danielstjules.com"
-                }
-            ],
-            "description": "A string manipulation library with multibyte support",
-            "homepage": "https://github.com/danielstjules/Stringy",
-            "keywords": [
-                "UTF",
-                "helpers",
-                "manipulation",
-                "methods",
-                "multibyte",
-                "string",
-                "utf-8",
-                "utility",
-                "utils"
-            ],
-            "time": "2015-02-10 06:19:18"
-        },
         {
             "name": "respect/validation",
             "version": "0.6.1",
@@ -111,21 +56,83 @@
             "time": "2014-07-11 06:35:17"
         },
         {
-            "name": "simplon/error",
-            "version": "0.2.3",
+            "name": "robmorgan/phinx",
+            "version": "v0.4.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fightbulc/simplon_error.git",
-                "reference": "99eb2945f32e90637ee2d503221cc5494e4d9f00"
+                "url": "https://github.com/robmorgan/phinx.git",
+                "reference": "1351ca36dd2419d7de02afd1aaa415929112d7f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_error/zipball/99eb2945f32e90637ee2d503221cc5494e4d9f00",
-                "reference": "99eb2945f32e90637ee2d503221cc5494e4d9f00",
+                "url": "https://api.github.com/repos/robmorgan/phinx/zipball/1351ca36dd2419d7de02afd1aaa415929112d7f1",
+                "reference": "1351ca36dd2419d7de02afd1aaa415929112d7f1",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3"
+                "php": ">=5.3.2",
+                "symfony/config": "~2.7",
+                "symfony/console": "~2.7",
+                "symfony/yaml": "~2.7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*",
+                "squizlabs/php_codesniffer": "dev-phpcs-fixer"
+            },
+            "bin": [
+                "bin/phinx"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phinx\\": "src/Phinx"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Morgan",
+                    "email": "robbym@gmail.com",
+                    "homepage": "http://robmorgan.id.au",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Woody Gilk",
+                    "email": "woody.gilk@gmail.com",
+                    "homepage": "http://shadowhand.me",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Phinx makes it ridiculously easy to manage the database migrations for your PHP app.",
+            "homepage": "https://phinx.org",
+            "keywords": [
+                "database",
+                "database migrations",
+                "db",
+                "migrations",
+                "phinx"
+            ],
+            "time": "2015-09-11 15:44:41"
+        },
+        {
+            "name": "simplon/error",
+            "version": "0.3.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fightbulc/simplon_error.git",
+                "reference": "53065fa33a36306e3efd40ef671e1361c165181a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fightbulc/simplon_error/zipball/53065fa33a36306e3efd40ef671e1361c165181a",
+                "reference": "53065fa33a36306e3efd40ef671e1361c165181a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
             },
             "type": "library",
             "autoload": {
@@ -152,7 +159,7 @@
                 "handling",
                 "response"
             ],
-            "time": "2015-03-14 19:12:16"
+            "time": "2015-09-26 18:55:27"
         },
         {
             "name": "simplon/form",
@@ -203,50 +210,6 @@
                 "validation"
             ],
             "time": "2015-09-12 11:02:28"
-        },
-        {
-            "name": "simplon/helper",
-            "version": "0.11.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fightbulc/simplon_helper.git",
-                "reference": "7921201862cedf56956718796f24d62b8cb96168"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_helper/zipball/7921201862cedf56956718796f24d62b8cb96168",
-                "reference": "7921201862cedf56956718796f24d62b8cb96168",
-                "shasum": ""
-            },
-            "require": {
-                "danielstjules/stringy": "1.9.*",
-                "php": ">=5.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Simplon\\Helper\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tino Ehrich",
-                    "email": "tino@bigpun.me",
-                    "role": "developer"
-                }
-            ],
-            "description": "Helpers for recurring requirements.",
-            "homepage": "https://github.com/fightbulc/simplon_helper",
-            "keywords": [
-                "helper",
-                "strings",
-                "value objects"
-            ],
-            "time": "2015-09-01 07:06:05"
         },
         {
             "name": "simplon/locale",
@@ -340,21 +303,21 @@
         },
         {
             "name": "simplon/mysql",
-            "version": "0.7.0",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fightbulc/simplon_mysql.git",
-                "reference": "f2f42330c2c1056268e1a9885813b521a71b7999"
+                "reference": "7f68dac98ba23e2182194e74a44b7aeb63ea3e26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_mysql/zipball/f2f42330c2c1056268e1a9885813b521a71b7999",
-                "reference": "f2f42330c2c1056268e1a9885813b521a71b7999",
+                "url": "https://api.github.com/repos/fightbulc/simplon_mysql/zipball/7f68dac98ba23e2182194e74a44b7aeb63ea3e26",
+                "reference": "7f68dac98ba23e2182194e74a44b7aeb63ea3e26",
                 "shasum": ""
             },
             "require": {
                 "ext-pdo": "*",
-                "php": ">=5.3"
+                "php": ">=5.4"
             },
             "type": "library",
             "autoload": {
@@ -381,7 +344,7 @@
                 "mysql",
                 "pdo"
             ],
-            "time": "2015-03-25 08:01:56"
+            "time": "2015-10-09 11:36:17"
         },
         {
             "name": "simplon/phtml",
@@ -474,16 +437,16 @@
         },
         {
             "name": "simplon/template",
-            "version": "0.5.0",
+            "version": "0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fightbulc/simplon_template.git",
-                "reference": "81e10fef58a62ab81f365b19d4824d4d280d799f"
+                "reference": "49852bb2baf8083ef28019adee71c182d429fa2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_template/zipball/81e10fef58a62ab81f365b19d4824d4d280d799f",
-                "reference": "81e10fef58a62ab81f365b19d4824d4d280d799f",
+                "url": "https://api.github.com/repos/fightbulc/simplon_template/zipball/49852bb2baf8083ef28019adee71c182d429fa2a",
+                "reference": "49852bb2baf8083ef28019adee71c182d429fa2a",
                 "shasum": ""
             },
             "require": {
@@ -517,7 +480,212 @@
                 "phtml",
                 "templates"
             ],
-            "time": "2015-08-23 17:53:07"
+            "time": "2015-09-26 18:55:59"
+        },
+        {
+            "name": "symfony/config",
+            "version": "v2.7.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/config.git",
+                "reference": "9698fdf0a750d6887d5e7729d5cf099765b20e61"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/config/zipball/9698fdf0a750d6887d5e7729d5cf099765b20e61",
+                "reference": "9698fdf0a750d6887d5e7729d5cf099765b20e61",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9",
+                "symfony/filesystem": "~2.3"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Config\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Config Component",
+            "homepage": "https://symfony.com",
+            "time": "2015-09-21 15:02:29"
+        },
+        {
+            "name": "symfony/console",
+            "version": "v2.7.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/console.git",
+                "reference": "06cb17c013a82f94a3d840682b49425cd00a2161"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/console/zipball/06cb17c013a82f94a3d840682b49425cd00a2161",
+                "reference": "06cb17c013a82f94a3d840682b49425cd00a2161",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "psr/log": "~1.0",
+                "symfony/event-dispatcher": "~2.1",
+                "symfony/phpunit-bridge": "~2.7",
+                "symfony/process": "~2.1"
+            },
+            "suggest": {
+                "psr/log": "For using the console logger",
+                "symfony/event-dispatcher": "",
+                "symfony/process": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Console\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Console Component",
+            "homepage": "https://symfony.com",
+            "time": "2015-09-25 08:32:23"
+        },
+        {
+            "name": "symfony/filesystem",
+            "version": "v2.7.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/filesystem.git",
+                "reference": "a17f8a17c20e8614c15b8e116e2f4bcde102cfab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/a17f8a17c20e8614c15b8e116e2f4bcde102cfab",
+                "reference": "a17f8a17c20e8614c15b8e116e2f4bcde102cfab",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Filesystem\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Filesystem Component",
+            "homepage": "https://symfony.com",
+            "time": "2015-09-09 17:42:36"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "v2.7.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "31cb2ad0155c95b88ee55fe12bc7ff92232c1770"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/31cb2ad0155c95b88ee55fe12bc7ff92232c1770",
+                "reference": "31cb2ad0155c95b88ee55fe12bc7ff92232c1770",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Yaml Component",
+            "homepage": "https://symfony.com",
+            "time": "2015-09-14 14:14:09"
         }
     ],
     "packages-dev": [],

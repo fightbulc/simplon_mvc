@@ -2,12 +2,14 @@
 
 namespace Simplon\Mvc;
 
-use Simplon\Error\ErrorContext;
-use Simplon\Helper\Config;
+use Simplon\Error\ErrorObserver;
+use Simplon\Error\Exceptions\ClientException;
+use Simplon\Error\Exceptions\ServerException;
 use Simplon\Locale\Locale;
 use Simplon\Mvc\Core\Responses\BrowserRedirect;
 use Simplon\Mvc\Core\Responses\BrowserResponse;
 use Simplon\Mvc\Core\Responses\RestResponse;
+use Simplon\Mvc\Core\Utils\Config;
 use Simplon\Request\Request;
 
 /**
@@ -16,9 +18,11 @@ use Simplon\Request\Request;
  */
 class Mvc
 {
-    const ENV_DEVEL = 'devel';
+    const ENV_DEV = 'dev';
     const ENV_STAGING = 'staging';
     const ENV_PRODUCTION = 'production';
+
+    const ROUTE_PLACEHOLDER_LOCALE = 'locale';
 
     /**
      * @var string
@@ -46,26 +50,22 @@ class Mvc
     private $locale;
 
     /**
-     * @param string $env
-     * @param ErrorObserver $errorObserver
+     * @var string
      */
-    public function __construct($env = self::ENV_DEVEL, ErrorObserver $errorObserver)
-    {
-        $this->env = $env;
-        $this->errorObserver = $errorObserver->observe();
-        $this->request = new Request();
-        $this->setupLocale();
-    }
+    private $module;
 
     /**
-     * @param string $path
-     *
-     * @return mixed
+     * @param ErrorObserver $errorObserver
+     * @param string $env
+     * @param string $module
      */
-    public static function loadFile($path)
+    public function __construct(ErrorObserver $errorObserver, $env = self::ENV_DEV, $module = 'app')
     {
-        /** @noinspection PhpIncludeInspection */
-        return require $path;
+        $this->errorObserver = $errorObserver->observe();
+        $this->env = $env;
+        $this->module = $module;
+        $this->request = new Request();
+        $this->setupLocale();
     }
 
     /**
@@ -77,15 +77,30 @@ class Mvc
     }
 
     /**
+     * @return string
+     */
+    public function getModule()
+    {
+        return $this->module;
+    }
+
+    /**
      * @return Config
      */
     public function getConfig()
     {
         if ($this->config === null)
         {
+            $env = [];
             $common = self::loadFile(__DIR__ . '/App/Configs/config.php');
-            $env = self::loadFile(__DIR__ . '/App/Configs/' . $this->getEnv() . '/config.php');
-            $this->config = new Config($common, $env);
+
+            // DEVEL will be our starting point for all environments
+            if ($this->getEnv() !== self::ENV_DEV)
+            {
+                $env = self::loadFile(__DIR__ . '/App/Configs/' . $this->getEnv() . '/config.php');
+            }
+
+            $this->config = (new Config())->setConfig($common, $env);
         }
 
         return $this->config;
@@ -108,32 +123,15 @@ class Mvc
     }
 
     /**
-     * @return string
-     */
-    public function getCurrentLocale()
-    {
-        return $this->getLocale()->getCurrentLocale();
-    }
-
-    /**
-     * @param $locale
-     *
-     * @return void
-     */
-    public function setCurrentLocale($locale)
-    {
-        self::getLocale()->setLocale($locale);
-    }
-
-    /**
      * @param string $requestedRoute
      *
      * @return string
+     * @throws ClientException
      */
     public function dispatch($requestedRoute = null)
     {
         // set all available routes
-        $routes = self::loadFile(__DIR__ . '/App/Configs/routes.php');
+        $routes = self::loadFile(__DIR__ . '/App/Routes/' . ucfirst(strtolower($this->getModule())) . '/routes.php');
 
         // set route
         $requestedRoute = $requestedRoute ?: $_SERVER['PATH_INFO'];
@@ -149,7 +147,10 @@ class Mvc
         {
             $placeholders = [];
 
-            // find placeholders
+            // lets be clean
+            $route['pattern'] = strtolower($route['pattern']);
+
+            // detect placeholders
             if (preg_match_all('/\{(.*?)\}/i', $route['pattern'], $matchPlaceholders, PREG_SET_ORDER))
             {
                 foreach ($matchPlaceholders as $placeholderKey)
@@ -158,8 +159,14 @@ class Mvc
                 }
             }
 
+            // replace placeholders
+            foreach ($placeholders as $placeholder)
+            {
+                $route['pattern'] = str_replace('{' . $placeholder . '}', $this->getRoutePattern($placeholder), $route['pattern']);
+            }
+
             // handle controller matching
-            if (preg_match_all('/' . preg_quote($route['pattern'], '/') . '\/*/i', $requestedRoute, $match, PREG_SET_ORDER))
+            if (preg_match_all('#^' . $route['pattern'] . '/*$#i', $requestedRoute, $match, PREG_SET_ORDER))
             {
                 // if home pattern the requested route should be empty too
                 if (empty($route['pattern']) === true && empty($requestedRoute) === false)
@@ -179,21 +186,74 @@ class Mvc
                 if (isset($match[0][1]))
                 {
                     // remove matched string
-                    unset($match[0][0]);
+                    array_shift($match[0]);
 
                     // set params
                     $params = $match[0];
                 }
+
+                // handle placeholder
+                $this->handleRoutePlaceholders($placeholders, $params);
 
                 // handle request/response
                 return $this->handleRequest($route, $params);
             }
         }
 
-        $errorContext = (new ErrorContext())
-            ->requestNotFound('Sorry, we cannot find what you requested', 0, ['route' => $requestedRoute]);
+        throw (new ClientException())->contentNotFound(['route' => $requestedRoute]);
+    }
 
-        return $this->getErrorObserver()->handleErrorResponse($errorContext);
+    /**
+     * @param string $key
+     *
+     * @return null|string
+     * @throws ServerException
+     */
+    private function getRoutePattern($key)
+    {
+        $pattern = null;
+
+        switch ($key)
+        {
+            case self::ROUTE_PLACEHOLDER_LOCALE:
+                if ($this->getConfig()->hasConfigKeys(['locales', 'available']))
+                {
+                    /** @var array $locales */
+                    $locales = $this->getConfig()->getConfigByKeys(['locales', 'available']);
+                    $pattern = '(' . join('|', $locales) . ')';
+                }
+                break;
+
+            default:
+                $pattern = '(.*?)';
+        }
+
+        return $pattern;
+    }
+
+    /**
+     * @param array $placeholders
+     * @param array $params
+     *
+     * @return array
+     */
+    private function handleRoutePlaceholders(array $placeholders, array $params)
+    {
+        foreach ($placeholders as $index => $placeholder)
+        {
+            switch ($placeholder)
+            {
+                case self::ROUTE_PLACEHOLDER_LOCALE:
+                    $this->setupLocale();
+                    $this->getLocale()->setLocale($params[$index]);
+                    unset($params[$index]);
+                    break;
+
+                default:
+            }
+        }
+
+        return $params;
     }
 
     /**
@@ -254,7 +314,7 @@ class Mvc
 
             // init locale
             $this->locale = new Locale(
-                rtrim($this->getConfig()->getConfigByKeys(['paths', 'src']), '/') . '/Views/Locales',
+                __DIR__ . '/App/Locales',
                 $availableLocales,
                 $this->getConfig()->getConfigByKeys(['locales', 'default'])
             );
@@ -264,9 +324,10 @@ class Mvc
     }
 
     /**
-     * @param $response
+     * @param mixed $response
      *
      * @return string
+     * @throws ServerException
      */
     private function handleResponse($response)
     {
@@ -296,27 +357,30 @@ class Mvc
                 5 => 'JSON_ERROR_UTF8',
             ];
 
-            $errorContext = (new ErrorContext())
-                ->internalError('An error occured while trying to send a JSON response', 0, ['type' => $errorCodes[$lastError]]);
-
-            return $this->getErrorObserver()->handleErrorResponse($errorContext);
+            throw (new ServerException())->internalError(['type' => $errorCodes[$lastError]]);
         }
         elseif ($response instanceof BrowserRedirect)
         {
+            // temporary/permanently status codes
+            if ($response->hasStatusCode())
+            {
+                http_response_code($response->getStatusCode());
+            }
+
             $this->getRequest()->redirect($response->getUrl());
         }
 
-        $errorContext = (new ErrorContext())
-            ->internalError('Unknown response type', 0, ['class' => get_class($response)]);
-
-        return $this->getErrorObserver()->handleErrorResponse($errorContext);
+        throw (new ServerException())->internalError(['class' => get_class($response)]);
     }
 
     /**
-     * @return ErrorObserver
+     * @param string $path
+     *
+     * @return mixed
      */
-    private function getErrorObserver()
+    private static function loadFile($path)
     {
-        return $this->errorObserver;
+        /** @noinspection PhpIncludeInspection */
+        return require $path;
     }
 }

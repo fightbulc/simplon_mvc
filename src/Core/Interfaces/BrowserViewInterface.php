@@ -1,30 +1,32 @@
 <?php
 
-namespace Simplon\Mvc\Core;
+namespace Simplon\Mvc\Core\Interfaces;
 
 /**
  * Interface BrowserViewInterface
- * @package Simplon\Mvc\Core
+ * @package Simplon\Mvc\Core\Interfaces
  */
 interface BrowserViewInterface
 {
     /**
-     * @param DataResponseInterface $data
+     * @param DataInterface $data
      */
-    public function __construct(DataResponseInterface $data = null);
+    public function __construct(DataInterface $data = null);
 
     /**
+     * @param array $params
+     *
      * @return BrowserViewInterface
      */
-    public function build();
+    public function build(array $params = []);
 
     /**
-     * @return DataResponseInterface
+     * @return DataInterface
      */
-    public function getDataRespones();
+    public function getDataResponse();
 
     /**
      * @return string
      */
-    public function getContent();
+    public function getResult();
 }

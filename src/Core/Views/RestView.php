@@ -2,8 +2,8 @@
 
 namespace Simplon\Mvc\Core\Views;
 
-use Simplon\Mvc\Core\DataResponseInterface;
-use Simplon\Mvc\Core\RestViewInterface;
+use Simplon\Mvc\Core\Interfaces\DataInterface;
+use Simplon\Mvc\Core\Interfaces\RestViewInterface;
 
 /**
  * Class RestView
@@ -12,52 +12,50 @@ use Simplon\Mvc\Core\RestViewInterface;
 abstract class RestView implements RestViewInterface
 {
     /**
-     * @var DataResponseInterface
+     * @var DataInterface
      */
-    private $data;
+    protected $data;
 
     /**
-     * @var string
+     * @var array
      */
-    private $content;
+    protected $result = [];
 
     /**
      * RestView constructor.
      *
-     * @param DataResponseInterface $data
+     * @param DataInterface $data
      */
-    public function __construct(DataResponseInterface $data)
+    public function __construct(DataInterface $data)
     {
         $this->data = $data;
     }
 
     /**
-     * @return string
+     * @return DataInterface
      */
-    public function getContent()
+    public function getDataResponse()
     {
-        return $this->content;
+        return $this->data;
     }
 
     /**
-     * @param string $content
+     * @return array
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param array $result
      *
      * @return RestView
      */
-    protected function setContent($content)
+    protected function setResult(array $result)
     {
-        $this->content = $content;
+        $this->result = $result;
 
         return $this;
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return string
-     */
-    protected function renderJson(array $data)
-    {
-        return json_encode($data);
     }
 }

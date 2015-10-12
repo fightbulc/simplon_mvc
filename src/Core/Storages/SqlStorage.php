@@ -2,102 +2,151 @@
 
 namespace Simplon\Mvc\Core\Storages;
 
-use Simplon\Mvc\Core\ModelInterface;
-use Simplon\Mvc\Core\SqlStorageInterface;
-use Simplon\Mysql\Manager\SqlManager;
-use Simplon\Mysql\Manager\SqlQueryBuilder;
-use Simplon\Mysql\Mysql;
+use Simplon\Mysql\Crud\CrudManager;
+use Simplon\Mysql\Crud\CrudModelInterface;
+use Simplon\Mysql\Crud\CrudStorageInterface;
+use Simplon\Mysql\MysqlException;
+use Simplon\Mysql\MysqlQueryIterator;
+use Simplon\Mysql\QueryBuilder\CreateQueryBuilder;
+use Simplon\Mysql\QueryBuilder\DeleteQueryBuilder;
+use Simplon\Mysql\QueryBuilder\ReadQueryBuilder;
+use Simplon\Mysql\QueryBuilder\UpdateQueryBuilder;
 
 /**
  * Class SqlStorage
  * @package Simplon\Mvc\Core\Storages
  */
-abstract class SqlStorage implements SqlStorageInterface
+abstract class SqlStorage implements CrudStorageInterface
 {
     /**
-     * @var Mysql
+     * @var CrudManager
      */
-    private $connection;
+    protected $crud;
 
     /**
-     * @var SqlManager
+     * @param CrudManager $crudManager
      */
-    private $sqlManager;
-
-    /**
-     * @param Mysql $connection
-     */
-    public function __construct(Mysql $connection)
+    public function __construct(CrudManager $crudManager)
     {
-        $this->connection = $connection;
+        $this->crud = $crudManager;
     }
 
     /**
-     * @return Mysql
+     * @param CrudModelInterface $model
+     *
+     * @return CrudModelInterface
      */
-    protected function getConnection()
+    public function crudCreate(CrudModelInterface $model)
     {
-        return $this->connection;
+        return $this->getCrud()->create(
+            (new CreateQueryBuilder())
+                ->setModel($model)
+                ->setTableName($this->getTableName())
+        );
     }
 
     /**
-     * @return SqlManager
+     * @param array $conds
+     *
+     * @return null|CrudModelInterface[]
      */
-    protected function getManager()
+    public function crudRead(array $conds)
     {
-        if ($this->sqlManager === null)
+        $cursor = $this->getCrud()->read(
+            (new ReadQueryBuilder())
+                ->setTableName($this->getTableName())
+                ->setConds($conds)
+        );
+
+        if ($cursor === null)
         {
-            $this->sqlManager = new SqlManager($this->getConnection());
+            return null;
         }
 
-        return $this->sqlManager;
+        return $this->manyDataToModels($cursor);
     }
 
     /**
-     * @return SqlQueryBuilder
+     * @param array $conds
+     *
+     * @return null|CrudModelInterface
      */
-    protected function getQueryBuilder()
+    public function crudReadOne(array $conds)
     {
-        return (new SqlQueryBuilder())->setTableName($this->getTableName());
+        $data = $this->getCrud()->readOne(
+            (new ReadQueryBuilder())
+                ->setTableName($this->getTableName())
+                ->setConds($conds)
+        );
+
+        if ($data === null)
+        {
+            return null;
+        }
+
+        return $this->dataToModel($data);
+    }
+
+    /**
+     * @param CrudModelInterface $model
+     *
+     * @return CrudModelInterface
+     */
+    public function crudUpdate(CrudModelInterface $model)
+    {
+        return $this->getCrud()->update(
+            (new UpdateQueryBuilder())
+                ->setModel($model)
+                ->setTableName($this->getTableName())
+        );
+    }
+
+    /**
+     * @param array $conds
+     *
+     * @throws MysqlException
+     */
+    public function crudDelete(array $conds)
+    {
+        $this->getCrud()->delete(
+            (new DeleteQueryBuilder())
+                ->setTableName($this->getTableName())
+                ->setConds($conds)
+        );
     }
 
     /**
      * @param array $data
      *
-     * @return ModelInterface
+     * @return CrudModelInterface
      */
     protected function dataToModel(array $data)
     {
-        $model = $this->manyDataToModels([$data]);
-
-        return array_shift($model);
+        return $this->getModel()->fromArray($data);
     }
 
     /**
-     * @param array $manyData
+     * @param MysqlQueryIterator $cursor
      *
-     * @return ModelInterface[]
+     * @return CrudModelInterface[]
      */
-    protected function manyDataToModels(array $manyData)
+    protected function manyDataToModels(MysqlQueryIterator $cursor)
     {
         $models = [];
 
-        foreach ($manyData as $data)
+        foreach ($cursor as $data)
         {
-            $model = clone $this->getModel();
-            $models[] = $model->fromArray($data);
+            $models[] = $this->getModel()->fromArray($data);
         }
 
         return $models;
     }
 
     /**
-     * @param bool $snakeCase
-     *
-     * @return array
+     * @return CrudManager
      */
-    protected function modelToArray($snakeCase = true)
+    protected function getCrud()
     {
-        return $this->getModel()->toArray($snakeCase);
+        return $this->crud;
     }
 }

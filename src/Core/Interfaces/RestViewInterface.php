@@ -1,6 +1,6 @@
 <?php
 
-namespace Simplon\Mvc\Core;
+namespace Simplon\Mvc\Core\Interfaces;
 
 /**
  * Interface RestViewInterface
@@ -9,12 +9,24 @@ namespace Simplon\Mvc\Core;
 interface RestViewInterface
 {
     /**
-     * @param DataResponseInterface $data
+     * @param DataInterface $data
      */
-    public function __construct(DataResponseInterface $data);
+    public function __construct(DataInterface $data);
 
     /**
-     * @return string
+     * @param array $params
+     *
+     * @return RestViewInterface
      */
-    public function getContent();
+    public function build(array $params = []);
+
+    /**
+     * @return DataInterface
+     */
+    public function getDataResponse();
+
+    /**
+     * @return array
+     */
+    public function getResult();
 }
