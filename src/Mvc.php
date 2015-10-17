@@ -2,14 +2,18 @@
 
 namespace Simplon\Mvc;
 
+use Core\Interfaces\ComponentRegistryInterface;
+use Core\Utils\Events\EventListener;
+use Core\Utils\Events\Events;
+use Core\Utils\Routes\Route;
 use Simplon\Error\ErrorObserver;
 use Simplon\Error\Exceptions\ClientException;
 use Simplon\Error\Exceptions\ServerException;
 use Simplon\Locale\Locale;
-use Simplon\Mvc\Core\Responses\BrowserRedirect;
-use Simplon\Mvc\Core\Responses\BrowserResponse;
-use Simplon\Mvc\Core\Responses\RestResponse;
-use Simplon\Mvc\Core\Utils\Config;
+use Simplon\Mvc\Responses\BrowserRedirect;
+use Simplon\Mvc\Responses\BrowserResponse;
+use Simplon\Mvc\Responses\RestResponse;
+use Simplon\Mvc\Utils\Config;
 use Simplon\Request\Request;
 
 /**
@@ -21,7 +25,6 @@ class Mvc
     const ENV_DEV = 'dev';
     const ENV_STAGING = 'staging';
     const ENV_PRODUCTION = 'production';
-
     const ROUTE_PLACEHOLDER_LOCALE = 'locale';
 
     /**
@@ -38,6 +41,16 @@ class Mvc
      * @var ErrorObserver
      */
     private $errorObserver;
+
+    /**
+     * @var Events
+     */
+    private $events;
+
+    /**
+     * @var Route[]
+     */
+    private $routes;
 
     /**
      * @var Request
@@ -65,6 +78,7 @@ class Mvc
         $this->env = $env;
         $this->module = $module;
         $this->request = new Request();
+        $this->events = new Events();
         $this->setupLocale();
     }
 
@@ -123,6 +137,43 @@ class Mvc
     }
 
     /**
+     * @return Events
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
+     * @param ComponentRegistryInterface $registry
+     *
+     * @return Mvc
+     */
+    public function addComponent(ComponentRegistryInterface $registry)
+    {
+        $this
+            ->addRoutes($registry->registerRoutes())
+            ->addEventListeners($registry->registerListeners());
+
+        return $this;
+    }
+
+    /**
+     * @param ComponentRegistryInterface[] $components
+     *
+     * @return Mvc
+     */
+    public function setComponents(array $components)
+    {
+        foreach ($components as $registry)
+        {
+            $this->addComponent($registry);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param string $requestedRoute
      *
      * @return string
@@ -130,28 +181,15 @@ class Mvc
      */
     public function dispatch($requestedRoute = null)
     {
-        // set all available routes
-        $routes = self::loadFile(__DIR__ . '/App/Routes/' . ucfirst(strtolower($this->getModule())) . '/routes.php');
-
-        // set route
-        $requestedRoute = $requestedRoute ?: $_SERVER['PATH_INFO'];
-
-        // clean route
-        $requestedRoute = rtrim($requestedRoute, '/');
-
-        // set request method
+        $requestedRoute = rtrim($requestedRoute ?: $_SERVER['PATH_INFO'], '/');
         $requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
 
-        // loop through all defined routes
-        foreach ($routes as $route)
+        foreach ($this->getRoutes() as $route)
         {
             $placeholders = [];
 
-            // lets be clean
-            $route['pattern'] = strtolower($route['pattern']);
-
             // detect placeholders
-            if (preg_match_all('/\{(.*?)\}/i', $route['pattern'], $matchPlaceholders, PREG_SET_ORDER))
+            if (preg_match_all('/\{(.*?)\}/i', $route->getPattern(), $matchPlaceholders, PREG_SET_ORDER))
             {
                 foreach ($matchPlaceholders as $placeholderKey)
                 {
@@ -162,20 +200,22 @@ class Mvc
             // replace placeholders
             foreach ($placeholders as $placeholder)
             {
-                $route['pattern'] = str_replace('{' . $placeholder . '}', $this->getRoutePattern($placeholder), $route['pattern']);
+                $route->setPattern(
+                    str_replace('{' . $placeholder . '}', $this->getRoutePattern($placeholder), $route->getPattern())
+                );
             }
 
             // handle controller matching
-            if (preg_match_all('#^' . $route['pattern'] . '/*$#i', $requestedRoute, $match, PREG_SET_ORDER))
+            if (preg_match_all('#^' . $route->getPattern() . '/*$#i', $requestedRoute, $match, PREG_SET_ORDER))
             {
                 // if home pattern the requested route should be empty too
-                if (empty($route['pattern']) === true && empty($requestedRoute) === false)
+                if (empty($route->getPattern()) === true && empty($requestedRoute) === false)
                 {
                     continue;
                 }
 
                 // handle request method restrictions
-                if (empty($route['method']) === false && strpos(strtoupper($route['method']), $requestMethod) === false)
+                if ($route->hasRequestMethod() && $route->getRequestMethod() !== $requestMethod)
                 {
                     continue;
                 }
@@ -201,6 +241,41 @@ class Mvc
         }
 
         throw (new ClientException())->contentNotFound(['route' => $requestedRoute]);
+    }
+
+    /**
+     * @param EventListener[] $events
+     *
+     * @return Mvc
+     */
+    private function addEventListeners(array $events)
+    {
+        foreach ($events as $event)
+        {
+            $this->getEvents()->on($event->getTrigger(), $event->getClosure());
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Route[]
+     */
+    private function getRoutes()
+    {
+        return $this->routes;
+    }
+
+    /**
+     * @param Route[] $routes
+     *
+     * @return Mvc
+     */
+    private function addRoutes(array $routes)
+    {
+        $this->routes = array_merge($this->routes, $routes);
+
+        return $this;
     }
 
     /**
@@ -257,18 +332,18 @@ class Mvc
     }
 
     /**
-     * @param array $route
+     * @param Route $route
      * @param array $params
      *
      * @return string
      */
-    private function handleRequest(array $route, array $params)
+    private function handleRequest(Route $route, array $params)
     {
         // handling via class
         if (isset($route['controller']))
         {
-            list($controller, $method) = explode('::', $route['controller']);
-
+            $controller = $route->getController();
+            $method = $route->getMethod();
             $response = call_user_func_array([(new $controller($this)), $method], $params);
         }
 
