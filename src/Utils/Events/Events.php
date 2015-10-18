@@ -1,10 +1,10 @@
 <?php
 
-namespace Core\Utils\Events;
+namespace Simplon\Mvc\Utils\Events;
 
 /**
  * Class Events
- * @package Core\Utils\Events
+ * @package Simplon\Mvc\Utils\Events
  */
 class Events
 {

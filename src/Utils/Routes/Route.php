@@ -1,10 +1,10 @@
 <?php
 
-namespace Core\Utils\Routes;
+namespace Simplon\Mvc\Utils\Routes;
 
 /**
  * Class Route
- * @package Core\Utils\Routes
+ * @package Simplon\Mvc\Utils\Routes
  */
 class Route
 {
@@ -27,6 +27,11 @@ class Route
      * @var string
      */
     private $method;
+
+    /**
+     * @var \Closure
+     */
+    private $callback;
 
     /**
      * @var string
@@ -77,6 +82,14 @@ class Route
     public function getController()
     {
         return $this->controller;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasController()
+    {
+        return isset($this->controller);
     }
 
     /**
@@ -138,6 +151,26 @@ class Route
         {
             $this->requestMethod = $requestMethod;
         }
+
+        return $this;
+    }
+
+    /**
+     * @return \Closure
+     */
+    public function getCallback()
+    {
+        return $this->callback;
+    }
+
+    /**
+     * @param \Closure $callback
+     *
+     * @return Route
+     */
+    public function setCallback(\Closure $callback)
+    {
+        $this->callback = $callback;
 
         return $this;
     }

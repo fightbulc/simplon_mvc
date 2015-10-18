@@ -16,6 +16,14 @@ class Config
     private $config;
 
     /**
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * @return array
      */
     public function getConfig()
@@ -24,14 +32,13 @@ class Config
     }
 
     /**
-     * @param array $configCommon
-     * @param array $configEnv
+     * @param array $config
      *
      * @return Config
      */
-    public function setConfig(array $configCommon, array $configEnv = [])
+    public function merge(array $config)
     {
-        $this->config = array_replace_recursive($configCommon, $configEnv);
+        $this->config = array_replace_recursive($this->config, $config);
 
         return $this;
     }

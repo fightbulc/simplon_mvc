@@ -2,7 +2,7 @@
 
 namespace Simplon\Mvc\Views\Browser\Pages;
 
-use Core\Views\Browser\Assets;
+use Simplon\Mvc\Views\Browser\Assets;
 use Simplon\Mvc\Views\Browser\BrowserView;
 use Simplon\Mvc\Views\Browser\Helper\PageBrowserViewHelper;
 

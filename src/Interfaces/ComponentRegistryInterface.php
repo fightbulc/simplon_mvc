@@ -1,13 +1,13 @@
 <?php
 
-namespace Core\Interfaces;
+namespace Simplon\Mvc\Interfaces;
 
-use Core\Utils\Events\EventListener;
-use Core\Utils\Routes\Route;
+use Simplon\Mvc\Utils\Events\EventListener;
+use Simplon\Mvc\Utils\Routes\Route;
 
 /**
  * Interface ComponentRegistryInterface
- * @package Core\Interfaces
+ * @package Simplon\Mvc\Interfaces
  */
 interface ComponentRegistryInterface
 {

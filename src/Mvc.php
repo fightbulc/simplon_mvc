@@ -2,10 +2,12 @@
 
 namespace Simplon\Mvc;
 
-use Core\Interfaces\ComponentRegistryInterface;
-use Core\Utils\Events\EventListener;
-use Core\Utils\Events\Events;
-use Core\Utils\Routes\Route;
+use Simplon\Locale\LocaleException;
+use Simplon\Mvc\Interfaces\ComponentRegistryInterface;
+use Simplon\Mvc\Utils\CastAway;
+use Simplon\Mvc\Utils\Events\EventListener;
+use Simplon\Mvc\Utils\Events\Events;
+use Simplon\Mvc\Utils\Routes\Route;
 use Simplon\Error\ErrorObserver;
 use Simplon\Error\Exceptions\ClientException;
 use Simplon\Error\Exceptions\ServerException;
@@ -25,12 +27,23 @@ class Mvc
     const ENV_DEV = 'dev';
     const ENV_STAGING = 'staging';
     const ENV_PRODUCTION = 'production';
+    const MODULE_DEFAULT = 'app';
     const ROUTE_PLACEHOLDER_LOCALE = 'locale';
 
     /**
      * @var string
      */
-    private $env;
+    private $pathApp = __DIR__ . '/../../../../src';
+
+    /**
+     * @var string
+     */
+    private $env = self::ENV_DEV;
+
+    /**
+     * @var string
+     */
+    private $module = self::MODULE_DEFAULT;
 
     /**
      * @var Config
@@ -58,28 +71,23 @@ class Mvc
     private $request;
 
     /**
-     * @var Locale
-     */
-    private $locale;
-
-    /**
      * @var string
      */
-    private $module;
+    private $localeId;
 
     /**
      * @param ErrorObserver $errorObserver
-     * @param string $env
-     * @param string $module
+     * @param ComponentRegistryInterface[] $components
      */
-    public function __construct(ErrorObserver $errorObserver, $env = self::ENV_DEV, $module = 'app')
+    public function __construct(ErrorObserver $errorObserver, array $components)
     {
         $this->errorObserver = $errorObserver->observe();
-        $this->env = $env;
-        $this->module = $module;
+
         $this->request = new Request();
         $this->events = new Events();
-        $this->setupLocale();
+
+        $this->initConfig();
+        $this->setComponents($components);
     }
 
     /**
@@ -91,6 +99,18 @@ class Mvc
     }
 
     /**
+     * @param string $env
+     *
+     * @return Mvc
+     */
+    public function setEnv($env)
+    {
+        $this->env = $env;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getModule()
@@ -99,25 +119,68 @@ class Mvc
     }
 
     /**
+     * @param string $module
+     *
+     * @return Mvc
+     */
+    public function setModule($module)
+    {
+        $this->module = $module;
+
+        return $this;
+    }
+
+    /**
+     * @return Mvc
+     */
+    public function initConfig()
+    {
+        $this->config = new Config(
+            self::loadFile($this->getPathApp() . '/Configs/config.php')
+        );
+
+        // staging or production
+        if ($this->getEnv() !== self::ENV_DEV)
+        {
+            $this->config->merge(
+                self::loadFile($this->getPathApp() . '/Configs/' . $this->getEnv() . '/config.php')
+            );
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Config
      */
     public function getConfig()
     {
-        if ($this->config === null)
+        return $this->config;
+    }
+
+    /**
+     * @param string $pathConfig
+     *
+     * @return Mvc
+     */
+    public function mergeComponentConfig($pathConfig)
+    {
+        $pathConfig = CastAway::trimPath($pathConfig);
+
+        $this
+            ->getConfig()
+            ->merge(
+                self::loadFile($pathConfig . '/config.php')
+            );
+
+        if ($this->getEnv() !== self::ENV_DEV)
         {
-            $env = [];
-            $common = self::loadFile(__DIR__ . '/App/Configs/config.php');
-
-            // DEVEL will be our starting point for all environments
-            if ($this->getEnv() !== self::ENV_DEV)
-            {
-                $env = self::loadFile(__DIR__ . '/App/Configs/' . $this->getEnv() . '/config.php');
-            }
-
-            $this->config = (new Config())->setConfig($common, $env);
+            $this->getConfig()->merge(
+                Mvc::loadFile($pathConfig . '/' . $this->getEnv() . '/config.php')
+            );
         }
 
-        return $this->config;
+        return $this;
     }
 
     /**
@@ -129,11 +192,73 @@ class Mvc
     }
 
     /**
-     * @return Locale
+     * @return string
      */
-    public function getLocale()
+    public function getLocaleId()
     {
-        return $this->locale;
+        return $this->localeId;
+    }
+
+    /**
+     * @param string $localeId
+     *
+     * @return Mvc
+     */
+    public function setLocaleId($localeId)
+    {
+        $this->localeId = $localeId;
+
+        return $this;
+    }
+
+    /**
+     * @param string $pathLocale
+     *
+     * @return Locale
+     * @throws ServerException
+     */
+    public function getComponentLocale($pathLocale)
+    {
+        $meta = null;
+
+        try
+        {
+            $hasValidLocaleConfig =
+                $this->getConfig()->hasConfigKeys(['locales']) === true
+                && $this->getConfig()->hasConfigKeys(['locales', 'default']) === true;
+
+            if ($hasValidLocaleConfig)
+            {
+                $availableLocales = [];
+                $defaultLocale = $this->getConfig()->getConfigByKeys(['locales', 'default']);
+
+                $hasDefinedAvailableLocales =
+                    $this->getConfig()->hasConfigKeys(['locales', 'available'])
+                    && is_array($this->getConfig()->getConfigByKeys(['locales', 'available']));
+
+                // set available if defined
+                if ($hasDefinedAvailableLocales)
+                {
+                    $availableLocales = $this->getConfig()->getConfigByKeys(['locales', 'available']);
+                }
+
+                // catch empty available locale
+                if (empty($availableLocales))
+                {
+                    $availableLocales = [
+                        $defaultLocale,
+                    ];
+                }
+
+                return new Locale($pathLocale, $availableLocales, $defaultLocale);
+            }
+        }
+        catch (LocaleException $e)
+        {
+            $meta = $e->getMessage();
+        }
+
+        throw (new ServerException)->internalError('Could not read locale information. Meta: ' . $meta);
     }
 
     /**
@@ -244,6 +369,14 @@ class Mvc
     }
 
     /**
+     * @return string
+     */
+    private function getPathApp()
+    {
+        return $this->pathApp;
+    }
+
+    /**
      * @param EventListener[] $events
      *
      * @return Mvc
@@ -273,7 +406,10 @@ class Mvc
      */
     private function addRoutes(array $routes)
     {
-        $this->routes = array_merge($this->routes, $routes);
+        foreach ($routes as $route)
+        {
+            $this->routes[] = $route;
+        }
 
         return $this;
     }
@@ -319,8 +455,7 @@ class Mvc
             switch ($placeholder)
             {
                 case self::ROUTE_PLACEHOLDER_LOCALE:
-                    $this->setupLocale();
-                    $this->getLocale()->setLocale($params[$index]);
+                    $this->setLocaleId($params[$index]);
                     unset($params[$index]);
                     break;
 
@@ -339,63 +474,12 @@ class Mvc
      */
     private function handleRequest(Route $route, array $params)
     {
-        // handling via class
-        if (isset($route['controller']))
-        {
-            $controller = $route->getController();
-            $method = $route->getMethod();
-            $response = call_user_func_array([(new $controller($this)), $method], $params);
-        }
+        $controller = $route->getController();
+        $method = $route->getMethod();
 
-        // handling via closure
-        else
-        {
-            $response = call_user_func_array($route['callback']($this), $params);
-        }
-
-        return $this->handleResponse($response);
-    }
-
-    /**
-     * @return Mvc
-     */
-    private function setupLocale()
-    {
-        $hasValidLocaleConfig =
-            $this->getConfig()->hasConfigKeys(['locales']) === true
-            && $this->getConfig()->hasConfigKeys(['locales', 'default']) === true;
-
-        if ($hasValidLocaleConfig)
-        {
-            $availableLocales = [];
-
-            $hasDefinedAvailableLocales =
-                $this->getConfig()->hasConfigKeys(['locales', 'available'])
-                && is_array($this->getConfig()->getConfigByKeys(['locales', 'available']));
-
-            // set available if defined
-            if ($hasDefinedAvailableLocales)
-            {
-                $availableLocales = $this->getConfig()->getConfigByKeys(['locales', 'available']);
-            }
-
-            // fill up default locale
-            if (empty($availableLocales) === true)
-            {
-                $availableLocales = [
-                    $this->getConfig()->getConfigByKeys(['locales', 'default']),
-                ];
-            }
-
-            // init locale
-            $this->locale = new Locale(
-                __DIR__ . '/App/Locales',
-                $availableLocales,
-                $this->getConfig()->getConfigByKeys(['locales', 'default'])
-            );
-        }
-
-        return $this;
+        return $this->handleResponse(
+            call_user_func_array([(new $controller($this)), $method], $params)
+        );
     }
 
     /**

@@ -2,8 +2,7 @@
 
 namespace Simplon\Mvc;
 
-use Core\Utils\Events\Events;
-use Simplon\Locale\Locale;
+use Simplon\Mvc\Utils\Events\Events;
 use Simplon\Mvc\Storages\SessionStorage;
 use Simplon\Mvc\Utils\Config;
 use Simplon\Request\Request;
@@ -33,14 +32,6 @@ trait ContextTrait
     public function getRequest()
     {
         return $this->getMvc()->getRequest();
-    }
-
-    /**
-     * @return Locale
-     */
-    public function getLocale()
-    {
-        return $this->getMvc()->getLocale();
     }
 
     /**

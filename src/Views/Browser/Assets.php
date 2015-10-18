@@ -1,10 +1,10 @@
 <?php
 
-namespace Core\Views\Browser;
+namespace Simplon\Mvc\Views\Browser;
 
 /**
  * Class Assets
- * @package Core\Views\Browser
+ * @package Simplon\Mvc\Views\Browser
  */
 class Assets
 {

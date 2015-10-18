@@ -10,7 +10,7 @@ use Simplon\Mvc\Views\Browser\FlashMessage;
 
 /**
  * Interface BrowserControllerInterface
- * @package Core\Interfaces
+ * @package Simplon\Mvc\Interfaces
  */
 interface BrowserControllerInterface
 {

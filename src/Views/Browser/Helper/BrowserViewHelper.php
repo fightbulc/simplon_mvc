@@ -1,10 +1,10 @@
 <?php
 
-namespace Core\Views\Browser\Helper;
+namespace Simplon\Mvc\Views\Browser\Helper;
 
 /**
  * Class BrowserViewHelper
- * @package Core\Views\Browser\Helper
+ * @package Simplon\Mvc\Views\Browser\Helper
  */
 class BrowserViewHelper
 {
