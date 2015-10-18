@@ -9,11 +9,6 @@ namespace Simplon\Mvc\Interfaces;
 interface BrowserViewInterface
 {
     /**
-     * @param DataInterface $data
-     */
-    public function __construct(DataInterface $data = null);
-
-    /**
      * @param array $params
      *
      * @return BrowserViewInterface
@@ -23,7 +18,7 @@ interface BrowserViewInterface
     /**
      * @return DataInterface
      */
-    public function getDataResponse();
+    public function getData();
 
     /**
      * @return string

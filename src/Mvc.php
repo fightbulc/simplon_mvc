@@ -3,6 +3,7 @@
 namespace Simplon\Mvc;
 
 use Simplon\Locale\LocaleException;
+use Simplon\Locale\Readers\FileReader;
 use Simplon\Mvc\Interfaces\ComponentRegistryInterface;
 use Simplon\Mvc\Utils\CastAway;
 use Simplon\Mvc\Utils\Events\EventListener;
@@ -250,7 +251,7 @@ class Mvc
                     ];
                 }
 
-                return new Locale($pathLocale, $availableLocales, $defaultLocale);
+                return new Locale(new FileReader($pathLocale), $availableLocales);
             }
         }
         catch (LocaleException $e)

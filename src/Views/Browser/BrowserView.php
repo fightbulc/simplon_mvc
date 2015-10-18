@@ -22,7 +22,7 @@ abstract class BrowserView implements BrowserViewInterface
     /**
      * @var DataInterface
      */
-    protected $dataResponse;
+    protected $data;
 
     /**
      * @var string
@@ -31,11 +31,14 @@ abstract class BrowserView implements BrowserViewInterface
 
     /**
      * @param DataInterface $data
+     *
+     * @return static
      */
-    public function __construct(DataInterface $data = null)
+    public function setData(DataInterface $data)
     {
-        $this->dataResponse = $data;
-        $this->renderer = new Template();
+        $this->data = $data;
+
+        return $this;
     }
 
     /**
@@ -49,7 +52,7 @@ abstract class BrowserView implements BrowserViewInterface
     /**
      * @param string $result
      *
-     * @return BrowserView
+     * @return static
      */
     protected function setResult($result)
     {
@@ -100,7 +103,7 @@ abstract class BrowserView implements BrowserViewInterface
     /**
      * @param string $path
      *
-     * @return BrowserView
+     * @return static
      */
     protected function addCssVendor($path)
     {
@@ -110,7 +113,7 @@ abstract class BrowserView implements BrowserViewInterface
     /**
      * @param string $path
      *
-     * @return BrowserView
+     * @return static
      */
     protected function addCssPage($path)
     {
@@ -120,7 +123,7 @@ abstract class BrowserView implements BrowserViewInterface
     /**
      * @param string $path
      *
-     * @return BrowserView
+     * @return static
      */
     protected function addCssComponent($path)
     {
@@ -130,7 +133,7 @@ abstract class BrowserView implements BrowserViewInterface
     /**
      * @param string $path
      *
-     * @return BrowserView
+     * @return static
      */
     protected function addJsVendor($path)
     {
@@ -140,7 +143,7 @@ abstract class BrowserView implements BrowserViewInterface
     /**
      * @param string $path
      *
-     * @return BrowserView
+     * @return static
      */
     protected function addJsPage($path)
     {
@@ -150,7 +153,7 @@ abstract class BrowserView implements BrowserViewInterface
     /**
      * @param string $path
      *
-     * @return BrowserView
+     * @return static
      */
     protected function addJsComponent($path)
     {
@@ -160,7 +163,7 @@ abstract class BrowserView implements BrowserViewInterface
     /**
      * @param array $code
      *
-     * @return $this
+     * @return static
      */
     protected function addCode(array $code)
     {
@@ -173,7 +176,7 @@ abstract class BrowserView implements BrowserViewInterface
      * @param string $path
      * @param string $blockId
      *
-     * @return $this
+     * @return static
      */
     private function addCss($path, $blockId = null)
     {
@@ -186,7 +189,7 @@ abstract class BrowserView implements BrowserViewInterface
      * @param string $path
      * @param null $blockId
      *
-     * @return $this
+     * @return static
      */
     private function addJs($path, $blockId = null)
     {
@@ -200,6 +203,11 @@ abstract class BrowserView implements BrowserViewInterface
      */
     private function getRenderer()
     {
+        if ($this->renderer === null)
+        {
+            $this->renderer = new Template();
+        }
+
         return $this->renderer;
     }
 }
