@@ -36,6 +36,9 @@
     "robmorgan/phinx": "0.4.*",
     "simplon/mvc_components": "0.0.*"
   },
+  "config": {
+    "component-dir": "public/assets/vendor"
+  },
   "autoload": {
     "psr-4": {
       "Simplon\\Mvc\\": "src/"
