@@ -23,7 +23,7 @@ use Simplon\Mvc\Views\Browser\FlashMessage;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= $trans->get('base', 'page-title') ?></title>
+    <title><?= $trans->get('page-title') ?></title>
 
     <?php foreach (['cssVendor', 'cssPage', 'cssComponent'] as $block): ?>
         <?php if (isset($$block)): ?>

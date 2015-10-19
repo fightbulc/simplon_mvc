@@ -160,24 +160,22 @@ class Mvc
     }
 
     /**
-     * @param string $pathConfig
+     * @param string $componentName
      *
      * @return Mvc
      */
-    public function mergeComponentConfig($pathConfig)
+    public function mergeComponentConfig($componentName)
     {
-        $pathConfig = CastAway::trimPath($pathConfig);
+        $path = 'Components/' . $componentName . '/Configs';
 
-        $this
-            ->getConfig()
-            ->merge(
-                self::loadFile($pathConfig . '/config.php')
-            );
+        $this->getConfig()->merge(
+            self::loadFile($this->getPathApp($path . '/config.php'))
+        );
 
         if ($this->getEnv() !== self::ENV_DEV)
         {
             $this->getConfig()->merge(
-                Mvc::loadFile($pathConfig . '/' . $this->getEnv() . '/config.php')
+                self::loadFile($path . '/' . $this->getEnv() . '/config.php')
             );
         }
 
@@ -213,12 +211,12 @@ class Mvc
     }
 
     /**
-     * @param string $pathLocale
+     * @param string $componentName
      *
      * @return Locale
      * @throws ServerException
      */
-    public function getComponentLocale($pathLocale)
+    public function mergeComponentLocale($componentName)
     {
         $meta = null;
 
@@ -251,7 +249,12 @@ class Mvc
                     ];
                 }
 
-                return new Locale(new FileReader($pathLocale), $availableLocales);
+                $paths = [
+                    $this->getPathApp('Locales'),
+                    $this->getPathApp('Components/' . $componentName . '/Locales'),
+                ];
+
+                return new Locale(new FileReader($paths), $availableLocales);
             }
         }
         catch (LocaleException $e)
@@ -388,10 +391,17 @@ class Mvc
     }
 
     /**
+     * @param string $addToPath
+     *
      * @return string
      */
-    private function getPathApp()
+    private function getPathApp($addToPath = null)
     {
+        if (isset($addToPath))
+        {
+            return $this->pathApp . '/' . CastAway::trimPath($addToPath);
+        }
+
         return $this->pathApp;
     }
 
