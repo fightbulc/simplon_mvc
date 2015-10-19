@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4b2026967d9c5f10eebae8f85e1ae3a5",
+    "hash": "9a4449ba7bdd1ef65ce192ea730d1377",
     "content-hash": "9110a0ae1858e468bf718da3ca1369a3",
     "packages": [
         {
@@ -213,16 +213,16 @@
         },
         {
             "name": "simplon/locale",
-            "version": "0.2.0",
+            "version": "0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fightbulc/simplon_locale.git",
-                "reference": "c4e266aa4834e6e8c533e34bb96e2bea7dafa051"
+                "reference": "7e9539948febb027166573383685df1070c98e0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_locale/zipball/c4e266aa4834e6e8c533e34bb96e2bea7dafa051",
-                "reference": "c4e266aa4834e6e8c533e34bb96e2bea7dafa051",
+                "url": "https://api.github.com/repos/fightbulc/simplon_locale/zipball/7e9539948febb027166573383685df1070c98e0a",
+                "reference": "7e9539948febb027166573383685df1070c98e0a",
                 "shasum": ""
             },
             "require": {
@@ -252,7 +252,7 @@
                 "locales",
                 "reader"
             ],
-            "time": "2015-10-18 12:12:02"
+            "time": "2015-10-19 13:08:38"
         },
         {
             "name": "simplon/mustache",
