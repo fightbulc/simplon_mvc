@@ -36,7 +36,7 @@ class Route
     /**
      * @var string
      */
-    private $requestMethod;
+    private $requestMethod = 'GET';
 
     /**
      * @param string $pattern

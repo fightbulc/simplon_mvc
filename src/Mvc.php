@@ -259,7 +259,12 @@ class Mvc
             $meta = $e->getMessage();
         }
 
-        throw (new ServerException)->internalError('Could not read locale information. Meta: ' . $meta);
+        throw (new ServerException)->internalError(
+            [
+                'reason' => 'Could not read locale information.',
+                'meta'   => $meta,
+            ]
+        );
     }
 
     /**
@@ -277,9 +282,22 @@ class Mvc
      */
     public function addComponent(ComponentRegistryInterface $registry)
     {
-        $this
-            ->addRoutes($registry->registerRoutes())
-            ->addEventListeners($registry->registerListeners());
+        $this->addRoutes($registry->registerRoutes());
+
+        if (method_exists($registry, 'registerEvents'))
+        {
+            $events = $registry->registerEvents($this);
+
+            if ($events !== null)
+            {
+                $listeners = $events->registerListeners();
+
+                if (isset($listeners))
+                {
+                    $this->addEventListeners($listeners);
+                }
+            }
+        }
 
         return $this;
     }
@@ -404,12 +422,28 @@ class Mvc
      * @param Route[] $routes
      *
      * @return Mvc
+     * @throws ServerException
      */
     private function addRoutes(array $routes)
     {
         foreach ($routes as $route)
         {
-            $this->routes[] = $route;
+            $patternHash = md5($route->getPattern() . $route->getRequestMethod());
+
+            if (isset($this->routes[$patternHash]))
+            {
+                throw (new ServerException())->internalError(
+                    [
+                        'reason'        => 'Component is trying to redeclare existing route',
+                        'pattern'       => $route->getPattern(),
+                        'requestMethod' => $route->getRequestMethod(),
+                        'controller'    => $route->getController(),
+                        'method'        => $route->getMethod(),
+                    ]
+                );
+            }
+
+            $this->routes[$patternHash] = $route;
         }
 
         return $this;

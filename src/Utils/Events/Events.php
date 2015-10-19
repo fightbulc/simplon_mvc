@@ -21,7 +21,7 @@ class Events
      */
     public function on($event, \Closure $listener)
     {
-        if (!isset($this->listeners[$event]))
+        if (empty($this->listeners[$event]))
         {
             $this->listeners[$event] = [];
         }

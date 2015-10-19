@@ -8,10 +8,10 @@ use Simplon\Mvc\Utils\Config;
 use Simplon\Request\Request;
 
 /**
- * Class ControllerTrait
+ * Class ContextTrait
  * @package Simplon\Mvc
  */
-trait ControllerTrait
+trait ContextTrait
 {
     /**
      * @var Mvc

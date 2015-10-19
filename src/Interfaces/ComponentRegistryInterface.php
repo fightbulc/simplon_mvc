@@ -2,7 +2,7 @@
 
 namespace Simplon\Mvc\Interfaces;
 
-use Simplon\Mvc\Utils\Events\EventListener;
+use Simplon\Mvc\Mvc;
 use Simplon\Mvc\Utils\Routes\Route;
 
 /**
@@ -12,9 +12,11 @@ use Simplon\Mvc\Utils\Routes\Route;
 interface ComponentRegistryInterface
 {
     /**
-     * @return EventListener[]
+     * @param Mvc $mvc
+     *
+     * @return ComponentEventsInterface|null
      */
-    public function registerListeners();
+    public function registerEvents(Mvc $mvc);
 
     /**
      * @return Route[]
