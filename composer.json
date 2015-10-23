@@ -32,7 +32,7 @@
     "simplon/locale": "0.2.*",
     "simplon/template": "0.6.*",
     "simplon/error": "0.3.*",
-    "simplon/form": "0.6.*",
+    "simplon/form": "1.0.*",
     "robmorgan/phinx": "0.4.*",
     "simplon/mvc_components": "0.0.*"
   },
