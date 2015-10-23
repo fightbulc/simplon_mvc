@@ -5,7 +5,7 @@
                          J \               '.
                           L \             _.-+
                           |  '.       _.-"   |
-                          J    \  _.-"       L    Simplon MVC
+                          J    \  _.-"       L    SIMPLON MVC
                            L    +"          J
                            +    |           |
                             \   |          .+
