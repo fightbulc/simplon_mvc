@@ -20,6 +20,7 @@ abstract class CorePageBrowserView extends BrowserView
     public function buildPage(PageBrowserViewHelper $page)
     {
         $this->addCssVendor(Assets::CORE_CSS);
+        $this->addJsVendor(Assets::CORE_JQUERY_VENDOR);
         $this->addJsVendor(Assets::CORE_JS);
 
         $page->setPage(__DIR__ . '/CorePageTemplate');
