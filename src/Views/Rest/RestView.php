@@ -22,6 +22,14 @@ abstract class RestView implements RestViewInterface
     protected $result = [];
 
     /**
+     * @param DataInterface $data
+     */
+    public function __construct(DataInterface $data = null)
+    {
+        $this->data = $data;
+    }
+
+    /**
      * @return DataInterface
      */
     public function getData()

@@ -31,6 +31,14 @@ abstract class BrowserView implements BrowserViewInterface
 
     /**
      * @param DataInterface $data
+     */
+    public function __construct(DataInterface $data = null)
+    {
+        $this->data = $data;
+    }
+
+    /**
+     * @param DataInterface $data
      *
      * @return static
      */
