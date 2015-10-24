@@ -2,7 +2,6 @@
 
 namespace Simplon\Mvc;
 
-use Simplon\Mvc\Data\UserSesssion;
 use Simplon\Mvc\Utils\Events\Events;
 use Simplon\Mvc\Storages\SessionStorage;
 use Simplon\Mvc\Utils\Config;
@@ -18,11 +17,6 @@ trait ContextTrait
      * @var Mvc
      */
     private $mvc;
-
-    /**
-     * @var UserSesssion
-     */
-    private $userSession;
 
     /**
      * @param Mvc $mvc
@@ -62,34 +56,6 @@ trait ContextTrait
     public function getConfig()
     {
         return $this->getMvc()->getConfig();
-    }
-
-    /**
-     * @return UserSesssion
-     */
-    public function getUserSession()
-    {
-        return $this->userSession;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasUserSession()
-    {
-        return $this->userSession instanceof UserSesssion;
-    }
-
-    /**
-     * @param UserSesssion $userSession
-     *
-     * @return ContextTrait
-     */
-    public function setUserSession(UserSesssion $userSession)
-    {
-        $this->userSession = $userSession;
-
-        return $this;
     }
 
     /**
