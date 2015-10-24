@@ -4,6 +4,7 @@ namespace Simplon\Mvc\Interfaces;
 
 use Simplon\Mvc\Mvc;
 use Simplon\Mvc\Utils\Events\EventListener;
+use Simplon\Mvc\Utils\Events\EventRequest;
 
 /**
  * Interface ComponentEventsInterface
@@ -20,4 +21,9 @@ interface ComponentEventsInterface
      * @return EventListener[]|null
      */
     public function registerListeners();
+
+    /**
+     * @return EventRequest[]|null
+     */
+    public function registerRequests();
 }

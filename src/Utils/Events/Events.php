@@ -14,6 +14,11 @@ class Events
     protected $listeners = [];
 
     /**
+     * @var array
+     */
+    protected $requests = [];
+
+    /**
      * @param string $event
      * @param \Closure $listener
      *
@@ -114,5 +119,33 @@ class Events
         }
 
         return $this;
+    }
+
+    /**
+     * @param EventRequest $event
+     *
+     * @return Events
+     */
+    public function addRequest(EventRequest $event)
+    {
+        $this->requests[$event->getTrigger()] = $event->getClosure();
+
+        return $this;
+    }
+
+    /**
+     * @param string $event
+     * @param array $params
+     *
+     * @return mixed|null
+     */
+    public function request($event, array $params = [])
+    {
+        if (isset($this->requests[$event]))
+        {
+            return call_user_func_array($this->requests[$event], $params);
+        }
+
+        return null;
     }
 }
