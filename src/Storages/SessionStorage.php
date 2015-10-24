@@ -15,24 +15,27 @@ class SessionStorage implements SessionStorageInterface
      */
     public function __construct($sessionTimeoutSeconds = 1800)
     {
-        // max session lifetime
-        ini_set("session.gc_maxlifetime", $sessionTimeoutSeconds);
-
-        // max session cookie lifetime
-        ini_set("session.cookie_lifetime", $sessionTimeoutSeconds);
-
-        // start session
-        session_start();
-
-        // renew cookie lifetime
-        if (isset($_COOKIE[session_name()]))
+        if(empty(session_id()))
         {
-            setcookie(
-                session_name(),
-                $_COOKIE[session_name()],
-                time() + $sessionTimeoutSeconds,
-                '/'
-            );
+            // max session lifetime
+            ini_set("session.gc_maxlifetime", $sessionTimeoutSeconds);
+
+            // max session cookie lifetime
+            ini_set("session.cookie_lifetime", $sessionTimeoutSeconds);
+
+            // start session
+            session_start();
+
+            // renew cookie lifetime
+            if (isset($_COOKIE[session_name()]))
+            {
+                setcookie(
+                    session_name(),
+                    $_COOKIE[session_name()],
+                    time() + $sessionTimeoutSeconds,
+                    '/'
+                );
+            }
         }
     }
 
