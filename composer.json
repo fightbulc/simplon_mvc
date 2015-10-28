@@ -33,7 +33,8 @@
     "simplon/template": "0.6.*",
     "simplon/error": "0.3.*",
     "simplon/form": "1.0.*",
-    "robmorgan/phinx": "0.4.*"
+    "robmorgan/phinx": "0.4.*",
+    "simplon/component_mvc": "0.0.*"
   },
   "config": {
     "component-dir": "public/assets/vendor"
