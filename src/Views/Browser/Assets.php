@@ -8,7 +8,7 @@ namespace Simplon\Mvc\Views\Browser;
  */
 class Assets
 {
-    const CORE_CSS = '/assets/vendor/semantic-ui/semantic.min.css';
-    const CORE_JS = '/assets/vendor/semantic-ui/semantic.min.js';
-    const CORE_JQUERY_VENDOR = '/assets/vendor/jquery/jquery-2.1.x.min.js';
+    const CORE_CSS = '/assets/vendor/semantic-ui/2.1.x/semantic.min.css';
+    const CORE_JS = '/assets/vendor/semantic-ui/2.1.x/semantic.min.js';
+    const CORE_JQUERY_VENDOR = '/assets/vendor/jquery/2.1.x/jquery-2.1.x.min.js';
 }
