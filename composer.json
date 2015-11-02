@@ -15,7 +15,8 @@
     "i18n",
     "fast",
     "lightweight",
-    "form"
+    "form",
+    "doi"
   ],
   "license": "MIT",
   "authors": [
@@ -33,6 +34,7 @@
     "simplon/template": "0.6.*",
     "simplon/error": "0.3.*",
     "simplon/form": "1.0.*",
+    "simplon/doi": "0.3.*",
     "robmorgan/phinx": "0.4.*",
     "simplon/component_mvc": "0.0.*"
   },
