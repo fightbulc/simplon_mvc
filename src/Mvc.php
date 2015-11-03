@@ -35,7 +35,7 @@ class Mvc
     /**
      * @var string
      */
-    private $pathApp = __DIR__ . '/../../../../src';
+    private $pathApp = __DIR__ . '/../../../../src/App';
 
     /**
      * @var string

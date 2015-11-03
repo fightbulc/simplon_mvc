@@ -1,0 +1,29 @@
+<?php
+/**
+ * @var string $activeTabId
+ * @var array $tabs
+ * @var string $content
+ */
+use Simplon\Mvc\Utils\CastAway;
+
+?>
+<div class="tiny-screen-container small-screen-container">
+    <div class="ui grid">
+        <?= $content ?>
+    </div>
+</div>
+
+<div class="big-screen-container">
+    <div class="ui top attached <?= CastAway::intToColumnWord(count($tabs)) ?> item tabular menu">
+        <?php foreach ($tabs as $id => $tab): ?>
+            <a href="<?= $tab['url'] ?>" class="item <?= $id === $activeTabId ? 'active' : null ?>">
+                <?= $tab['label'] ?>
+            </a>
+        <?php endforeach ?>
+    </div>
+    <div class="ui bottom attached segment">
+        <div class="ui grid">
+            <?= $content ?>
+        </div>
+    </div>
+</div>
