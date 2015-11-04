@@ -89,15 +89,17 @@ abstract class SqlStorage implements CrudStorageInterface
 
     /**
      * @param CrudModelInterface $model
+     * @param array $conds
      *
      * @return CrudModelInterface
      */
-    public function crudUpdate(CrudModelInterface $model)
+    public function crudUpdate(CrudModelInterface $model, array $conds)
     {
         return $this->getCrud()->update(
             (new UpdateQueryBuilder())
                 ->setModel($model)
                 ->setTableName($this->getTableName())
+                ->setConds($conds)
         );
     }
 
