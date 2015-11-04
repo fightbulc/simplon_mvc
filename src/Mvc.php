@@ -6,8 +6,8 @@ use Simplon\Locale\LocaleException;
 use Simplon\Locale\Readers\FileReader;
 use Simplon\Mvc\Interfaces\ComponentRegistryInterface;
 use Simplon\Mvc\Utils\CastAway;
-use Simplon\Mvc\Utils\Events\EventListener;
-use Simplon\Mvc\Utils\Events\EventRequest;
+use Simplon\Mvc\Utils\Events\PushEvent;
+use Simplon\Mvc\Utils\Events\PullEvent;
 use Simplon\Mvc\Utils\Events\Events;
 use Simplon\Mvc\Utils\Routes\Route;
 use Simplon\Error\ErrorObserver;
@@ -294,14 +294,14 @@ class Mvc
 
             if ($events !== null)
             {
-                $listeners = $events->registerListeners();
+                $listeners = $events->registerPushs();
 
                 if ($listeners)
                 {
                     $this->addEventListeners($listeners);
                 }
 
-                $requests = $events->registerRequests();
+                $requests = $events->registerPulls();
 
                 if ($requests)
                 {
@@ -414,7 +414,7 @@ class Mvc
     }
 
     /**
-     * @param EventListener[] $events
+     * @param PushEvent[] $events
      *
      * @return Mvc
      */
@@ -422,14 +422,14 @@ class Mvc
     {
         foreach ($events as $event)
         {
-            $this->getEvents()->on($event->getTrigger(), $event->getClosure());
+            $this->getEvents()->addPush($event->getTrigger(), $event->getClosure());
         }
 
         return $this;
     }
 
     /**
-     * @param EventRequest[] $events
+     * @param PullEvent[] $events
      *
      * @return Mvc
      */
@@ -437,7 +437,7 @@ class Mvc
     {
         foreach ($events as $event)
         {
-            $this->getEvents()->addRequest($event);
+            $this->getEvents()->addPull($event);
         }
 
         return $this;

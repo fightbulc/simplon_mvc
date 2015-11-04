@@ -3,10 +3,10 @@
 namespace Simplon\Mvc\Utils\Events;
 
 /**
- * Class EventRequest
+ * Class PushEvent
  * @package Simplon\Mvc\Utils\Events
  */
-class EventRequest
+class PushEvent
 {
     /**
      * @var string

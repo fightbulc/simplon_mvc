@@ -3,10 +3,10 @@
 namespace Simplon\Mvc\Utils\Events;
 
 /**
- * Class EventListener
+ * Class PullEvent
  * @package Simplon\Mvc\Utils\Events
  */
-class EventListener
+class PullEvent
 {
     /**
      * @var string

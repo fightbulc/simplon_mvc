@@ -3,8 +3,8 @@
 namespace Simplon\Mvc\Interfaces;
 
 use Simplon\Mvc\Mvc;
-use Simplon\Mvc\Utils\Events\EventListener;
-use Simplon\Mvc\Utils\Events\EventRequest;
+use Simplon\Mvc\Utils\Events\PushEvent;
+use Simplon\Mvc\Utils\Events\PullEvent;
 
 /**
  * Interface ComponentEventsInterface
@@ -18,12 +18,12 @@ interface ComponentEventsInterface
     public function __construct(Mvc $mvc);
 
     /**
-     * @return EventListener[]|null
+     * @return PushEvent[]|null
      */
-    public function registerListeners();
+    public function registerPushes();
 
     /**
-     * @return EventRequest[]|null
+     * @return PullEvent[]|null
      */
-    public function registerRequests();
+    public function registerPulls();
 }

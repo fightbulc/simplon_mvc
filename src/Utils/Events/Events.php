@@ -11,12 +11,12 @@ class Events
     /**
      * @var array
      */
-    protected $listeners = [];
+    protected $pushes = [];
 
     /**
      * @var array
      */
-    protected $requests = [];
+    protected $pulls = [];
 
     /**
      * @param string $event
@@ -24,14 +24,14 @@ class Events
      *
      * @return Events
      */
-    public function on($event, \Closure $listener)
+    public function addPush($event, \Closure $listener)
     {
-        if (empty($this->listeners[$event]))
+        if (empty($this->pushes[$event]))
         {
-            $this->listeners[$event] = [];
+            $this->pushes[$event] = [];
         }
 
-        $this->listeners[$event][] = $listener;
+        $this->pushes[$event][] = $listener;
 
         return $this;
     }
@@ -42,34 +42,15 @@ class Events
      *
      * @return Events
      */
-    public function once($event, \Closure $listener)
+    public function removePush($event, \Closure $listener)
     {
-        $onceListener = function () use (&$onceListener, $event, $listener)
+        if (isset($this->pushes[$event]))
         {
-            $this->removeListener($event, $onceListener);
-            call_user_func_array($listener, func_get_args());
-        };
-
-        $this->on($event, $onceListener);
-
-        return $this;
-    }
-
-    /**
-     * @param string $event
-     * @param \Closure $listener
-     *
-     * @return Events
-     */
-    public function removeListener($event, \Closure $listener)
-    {
-        if (isset($this->listeners[$event]))
-        {
-            $index = array_search($listener, $this->listeners[$event], true);
+            $index = array_search($listener, $this->pushes[$event], true);
 
             if (false !== $index)
             {
-                unset($this->listeners[$event][$index]);
+                unset($this->pushes[$event][$index]);
             }
         }
 
@@ -81,15 +62,15 @@ class Events
      *
      * @return Events
      */
-    public function removeAllListeners($event = null)
+    public function removePushes($event = null)
     {
         if ($event !== null)
         {
-            unset($this->listeners[$event]);
+            unset($this->pushes[$event]);
         }
         else
         {
-            $this->listeners = [];
+            $this->pushes = [];
         }
 
         return $this;
@@ -100,9 +81,9 @@ class Events
      *
      * @return array
      */
-    public function listeners($event)
+    public function getPushes($event)
     {
-        return isset($this->listeners[$event]) ? $this->listeners[$event] : [];
+        return isset($this->pushes[$event]) ? $this->pushes[$event] : [];
     }
 
     /**
@@ -111,24 +92,24 @@ class Events
      *
      * @return Events
      */
-    public function emit($event, array $params = [])
+    public function push($event, array $params = [])
     {
-        foreach ($this->listeners($event) as $listener)
+        foreach ($this->getPushes($event) as $push)
         {
-            call_user_func_array($listener, $params);
+            call_user_func_array($push, $params);
         }
 
         return $this;
     }
 
     /**
-     * @param EventRequest $event
+     * @param PullEvent $event
      *
      * @return Events
      */
-    public function addRequest(EventRequest $event)
+    public function addPull(PullEvent $event)
     {
-        $this->requests[$event->getTrigger()] = $event->getClosure();
+        $this->pulls[$event->getTrigger()] = $event->getClosure();
 
         return $this;
     }
@@ -139,11 +120,11 @@ class Events
      *
      * @return mixed|null
      */
-    public function request($event, array $params = [])
+    public function pull($event, array $params = [])
     {
-        if (isset($this->requests[$event]))
+        if (isset($this->pulls[$event]))
         {
-            return call_user_func_array($this->requests[$event], $params);
+            return call_user_func_array($this->pulls[$event], $params);
         }
 
         return null;
