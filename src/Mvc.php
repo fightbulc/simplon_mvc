@@ -294,7 +294,7 @@ class Mvc
 
             if ($events !== null)
             {
-                $listeners = $events->registerPushs();
+                $listeners = $events->registerPushes();
 
                 if ($listeners)
                 {
