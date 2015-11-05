@@ -12,29 +12,4 @@ use Simplon\Mvc\Utils\SerializationTrait;
 abstract class Data implements DataInterface
 {
     use SerializationTrait;
-
-    /**
-     * @var bool
-     */
-    protected $isProcessed;
-
-    /**
-     * @return boolean
-     */
-    public function isProcessed()
-    {
-        return $this->isProcessed;
-    }
-
-    /**
-     * @param boolean $isProcessed
-     *
-     * @return static
-     */
-    public function setIsProcessed($isProcessed)
-    {
-        $this->isProcessed = $isProcessed === true;
-
-        return $this;
-    }
 }

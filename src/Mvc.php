@@ -161,12 +161,15 @@ class Mvc
     }
 
     /**
-     * @param string $componentName
+     * @param string $pathComponent
      *
      * @return Mvc
      */
-    public function mergeComponentConfig($componentName)
+    public function mergeComponentConfig($pathComponent)
     {
+        $pathComponentParts = explode('/', $pathComponent);
+        $componentName = array_pop($pathComponentParts);
+
         $path = 'Components/' . $componentName . '/Configs';
 
         $this->getConfig()->merge(
@@ -212,12 +215,12 @@ class Mvc
     }
 
     /**
-     * @param string $componentName
+     * @param string $pathComponent
      *
      * @return Locale
      * @throws ServerException
      */
-    public function mergeComponentLocale($componentName)
+    public function mergeComponentLocale($pathComponent)
     {
         $meta = null;
 
@@ -249,6 +252,9 @@ class Mvc
                         $defaultLocale,
                     ];
                 }
+
+                $pathComponentParts = explode('/', $pathComponent);
+                $componentName = array_pop($pathComponentParts);
 
                 $paths = [
                     $this->getPathApp('Locales'),
@@ -294,18 +300,18 @@ class Mvc
 
             if ($events !== null)
             {
-                $listeners = $events->registerPushes();
+                $pushes = $events->registerPushes();
 
-                if ($listeners)
+                if ($pushes)
                 {
-                    $this->addEventListeners($listeners);
+                    $this->addEventPushes($pushes);
                 }
 
-                $requests = $events->registerPulls();
+                $pulls = $events->registerPulls();
 
-                if ($requests)
+                if ($pulls)
                 {
-                    $this->addEventRequests($requests);
+                    $this->addEventPulls($pulls);
                 }
             }
         }
@@ -418,7 +424,7 @@ class Mvc
      *
      * @return Mvc
      */
-    private function addEventListeners(array $events)
+    private function addEventPushes(array $events)
     {
         foreach ($events as $event)
         {
@@ -433,7 +439,7 @@ class Mvc
      *
      * @return Mvc
      */
-    private function addEventRequests(array $events)
+    private function addEventPulls(array $events)
     {
         foreach ($events as $event)
         {

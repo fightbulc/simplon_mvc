@@ -20,33 +20,33 @@ class Events
 
     /**
      * @param string $event
-     * @param \Closure $listener
+     * @param \Closure $callback
      *
      * @return Events
      */
-    public function addPush($event, \Closure $listener)
+    public function addPush($event, \Closure $callback)
     {
         if (empty($this->pushes[$event]))
         {
             $this->pushes[$event] = [];
         }
 
-        $this->pushes[$event][] = $listener;
+        $this->pushes[$event][] = $callback;
 
         return $this;
     }
 
     /**
      * @param string $event
-     * @param \Closure $listener
+     * @param \Closure $callback
      *
      * @return Events
      */
-    public function removePush($event, \Closure $listener)
+    public function removePush($event, \Closure $callback)
     {
         if (isset($this->pushes[$event]))
         {
-            $index = array_search($listener, $this->pushes[$event], true);
+            $index = array_search($callback, $this->pushes[$event], true);
 
             if (false !== $index)
             {
