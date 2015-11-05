@@ -1,7 +1,7 @@
 <?php
 /**
  * @var FlashMessage $flash
- * @var Locale $trans
+ * @var Locale $locale
  *
  * @var string $cssVendor
  * @var string $cssPage
@@ -18,12 +18,12 @@ use Simplon\Mvc\Views\Browser\FlashMessage;
 
 ?>
 <!DOCTYPE html>
-<html lang="<?= $trans->getCurrentLocale() ?>">
+<html lang="<?= $locale->getCurrentLocale() ?>">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title><?= $trans->get('page-title') ?></title>
+    <title><?= $locale->get('page-title') ?></title>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
@@ -34,12 +34,12 @@ use Simplon\Mvc\Views\Browser\FlashMessage;
     <?php endforeach ?>
 </head>
 <body>
-<?= $partialModule ?>
+    <?= $partialModule ?>
 
-<?php foreach (['codeDefault', 'jsVendor', 'jsPage', 'jsComponent'] as $block): ?>
-    <?php if (isset($$block)): ?>
-        <?= $$block ?>
-    <?php endif ?>
-<?php endforeach ?>
+    <?php foreach (['codeDefault', 'jsVendor', 'jsPage', 'jsComponent'] as $block): ?>
+        <?php if (isset($$block)): ?>
+            <?= $$block ?>
+        <?php endif ?>
+    <?php endforeach ?>
 </body>
 </html>

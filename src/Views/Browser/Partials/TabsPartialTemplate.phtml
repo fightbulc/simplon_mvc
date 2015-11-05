@@ -1,10 +1,15 @@
 <?php
 /**
+ * @var FlashMessage $flash
+ * @var Locale $locale
+ *
  * @var string $activeTabId
  * @var array $tabs
  * @var string $content
  */
+use Simplon\Locale\Locale;
 use Simplon\Mvc\Utils\CastAway;
+use Simplon\Mvc\Views\Browser\FlashMessage;
 
 ?>
 <div class="tiny-screen-container small-screen-container">
@@ -22,8 +27,6 @@ use Simplon\Mvc\Utils\CastAway;
         <?php endforeach ?>
     </div>
     <div class="ui bottom attached segment">
-        <div class="ui grid">
-            <?= $content ?>
-        </div>
+        <?= $content ?>
     </div>
 </div>
