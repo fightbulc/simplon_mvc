@@ -10,7 +10,11 @@ use Simplon\Mvc\Interfaces\SessionStorageInterface;
  */
 class FlashMessage
 {
-    const FLASH_MESSAGE_KEY = 'SIMPLON_FRONTEND_FLASH';
+    const SESSION_KEY = 'SIMPLON_FRONTEND_FLASH';
+    const TYPE_INFO = 'info';
+    const TYPE_SUCCESS = 'success';
+    const TYPE_WARNING = 'warning';
+    const TYPE_ERROR = 'error';
 
     /**
      * @var SessionStorageInterface
@@ -30,7 +34,7 @@ class FlashMessage
      */
     public function hasFlash()
     {
-        return $this->getSessionStorage()->has(self::FLASH_MESSAGE_KEY);
+        return $this->getSessionStorage()->has(self::SESSION_KEY);
     }
 
     /**
@@ -39,17 +43,17 @@ class FlashMessage
     public function getFlash()
     {
         // fetch message
-        $flash = $this->getSessionStorage()->get(self::FLASH_MESSAGE_KEY);
+        $flash = $this->getSessionStorage()->get(self::SESSION_KEY);
 
         // remove from session
-        $this->getSessionStorage()->del(self::FLASH_MESSAGE_KEY);
+        $this->getSessionStorage()->del(self::SESSION_KEY);
 
         if ($flash === null)
         {
             return null;
         }
 
-        return '<div class="flash-message ' . $flash['type'] . '">' . $flash['message'] . '</div>';
+        return '<div class="ui huge ' . $flash['type'] . ' message flash-message">' . $flash['message'] . '</div>';
     }
 
     /**
@@ -59,7 +63,17 @@ class FlashMessage
      */
     public function setFlashNormal($message)
     {
-        return $this->setFlash('flash-normal', $message);
+        return $this->setFlash($message);
+    }
+
+    /**
+     * @param string $message
+     *
+     * @return bool
+     */
+    public function setFlashInfo($message)
+    {
+        return $this->setFlash($message, self::TYPE_INFO);
     }
 
     /**
@@ -69,7 +83,7 @@ class FlashMessage
      */
     public function setFlashSuccess($message)
     {
-        return $this->setFlash('flash-success', $message);
+        return $this->setFlash($message, self::TYPE_SUCCESS);
     }
 
     /**
@@ -79,7 +93,7 @@ class FlashMessage
      */
     public function setFlashWarning($message)
     {
-        return $this->setFlash('flash-warning', $message);
+        return $this->setFlash($message, self::TYPE_WARNING);
     }
 
     /**
@@ -89,18 +103,18 @@ class FlashMessage
      */
     public function setFlashError($message)
     {
-        return $this->setFlash('flash-error', $message);
+        return $this->setFlash($message, self::TYPE_ERROR);
     }
 
     /**
-     * @param string $type
      * @param string $message
+     * @param string $type
      *
      * @return bool
      */
-    private function setFlash($type, $message)
+    private function setFlash($message, $type = null)
     {
-        return $this->getSessionStorage()->set(self::FLASH_MESSAGE_KEY, ['type' => $type, 'message' => $message]);
+        return $this->getSessionStorage()->set(self::SESSION_KEY, ['message' => $message, 'type' => $type]);
     }
 
     /**
