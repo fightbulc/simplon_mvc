@@ -342,7 +342,7 @@ class Mvc
      */
     public function dispatch($requestedRoute = null)
     {
-        $requestedRoute = rtrim($requestedRoute ?: $_SERVER['PATH_INFO'], '/');
+        $requestedRoute = $_SERVER['SERVER_NAME'] . rtrim($requestedRoute ?: $_SERVER['PATH_INFO'], '/');
         $requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
 
         foreach ($this->getRoutes() as $route)
@@ -367,7 +367,7 @@ class Mvc
             }
 
             // handle controller matching
-            if (preg_match_all('#^' . $route->getPattern() . '/*$#i', $requestedRoute, $match, PREG_SET_ORDER))
+            if (preg_match_all('#^' . $route->getDomain() . $route->getPattern() . '/*$#i', $requestedRoute, $match, PREG_SET_ORDER))
             {
                 // if home pattern the requested route should be empty too
                 if (empty($route->getPattern()) === true && empty($requestedRoute) === false)
@@ -467,13 +467,14 @@ class Mvc
     {
         foreach ($routes as $route)
         {
-            $patternHash = md5($route->getPattern() . $route->getRequestMethod());
+            $patternHash = md5($route->getDomain() . $route->getPattern() . $route->getRequestMethod());
 
             if (isset($this->routes[$patternHash]))
             {
                 throw (new ServerException())->internalError(
                     [
                         'reason'        => 'Component is trying to redeclare existing route',
+                        'domain'        => $route->getDomain(),
                         'pattern'       => $route->getPattern(),
                         'requestMethod' => $route->getRequestMethod(),
                         'controller'    => $route->getController(),

@@ -16,6 +16,11 @@ class Route
     /**
      * @var string
      */
+    private $domain;
+
+    /**
+     * @var string
+     */
     private $pattern;
 
     /**
@@ -39,13 +44,15 @@ class Route
     private $requestMethod;
 
     /**
+     * @param string $domain
      * @param string $pattern
      * @param string $controller
      * @param string $method
      * @param string $requestMethod
      */
-    public function __construct($pattern, $controller, $method, $requestMethod = null)
+    public function __construct($domain, $pattern, $controller, $method, $requestMethod = null)
     {
+        $this->domain = $domain;
         $this->pattern = $pattern;
         $this->controller = $controller;
         $this->method = $method;
@@ -54,6 +61,26 @@ class Route
         {
             $this->requestMethod = $requestMethod;
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
+
+    /**
+     * @param string $domain
+     *
+     * @return Route
+     */
+    public function setDomain($domain)
+    {
+        $this->domain = $domain;
+
+        return $this;
     }
 
     /**
