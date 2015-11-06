@@ -2,6 +2,8 @@
 
 namespace Simplon\Mvc\Utils\Routes;
 
+use Simplon\Mvc\Utils\CastAway;
+
 /**
  * Class Route
  * @package Simplon\Mvc\Utils\Routes
@@ -68,7 +70,9 @@ class Route
      */
     public function getDomain()
     {
-        return $this->domain;
+        return CastAway::trimPath(
+            strtolower($this->domain)
+        );
     }
 
     /**
