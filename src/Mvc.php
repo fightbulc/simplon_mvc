@@ -369,12 +369,6 @@ class Mvc
             // handle controller matching
             if (preg_match_all('#^' . $route->getDomain() . $route->getPattern() . '/*$#i', $requestedRoute, $match, PREG_SET_ORDER))
             {
-                // if home pattern the requested route should be empty too
-                if (empty($route->getPattern()) === true && empty($requestedRoute) === false)
-                {
-                    continue;
-                }
-
                 // handle request method restrictions
                 if ($route->hasRequestMethod() && $route->getRequestMethod() !== $requestMethod)
                 {
