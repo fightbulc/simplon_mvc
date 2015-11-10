@@ -388,7 +388,7 @@ class Mvc
                 }
 
                 // handle placeholder
-                $this->handleRoutePlaceholders($placeholders, $params);
+                $params = $this->handleRoutePlaceholders($placeholders, $params);
 
                 // handle request/response
                 return $this->handleRequest($route, $params);
