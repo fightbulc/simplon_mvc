@@ -102,7 +102,7 @@ abstract class BrowserView implements BrowserViewInterface
         foreach ($page->getPartials() as $viewKey => $pathTemplate)
         {
             $partial = $this->renderPartial($pathTemplate, $params);
-            $params['partial' . ucfirst(strtolower($viewKey))] = $partial;
+            $params[$viewKey] = $partial;
         }
 
         return $this->renderPartial($page->getPage(), $params);
