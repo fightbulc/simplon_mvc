@@ -27,7 +27,7 @@ use Simplon\Mvc\Views\Browser\FlashMessage;
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
-    <?php foreach (['cssVendor', 'cssPage', 'cssComponent'] as $block): ?>
+    <?php foreach (['cssVendor', 'cssForm', 'cssPage', 'cssComponent'] as $block): ?>
         <?php if (isset($$block)): ?>
             <?= $$block ?>
         <?php endif ?>
@@ -36,7 +36,7 @@ use Simplon\Mvc\Views\Browser\FlashMessage;
 <body>
     <?= $moduleContent ?>
 
-    <?php foreach (['codeDefault', 'jsVendor', 'jsPage', 'jsComponent'] as $block): ?>
+    <?php foreach (['codeDefault', 'jsVendor', 'jsForm', 'jsPage', 'jsComponent', 'codeForm'] as $block): ?>
         <?php if (isset($$block)): ?>
             <?= $$block ?>
         <?php endif ?>

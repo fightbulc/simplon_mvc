@@ -2,6 +2,7 @@
 
 namespace Simplon\Mvc\Views\Browser;
 
+use Simplon\Form\FormView;
 use Simplon\Mvc\Interfaces\BrowserViewInterface;
 use Simplon\Mvc\Interfaces\DataInterface;
 use Simplon\Mvc\Utils\CastAway;
@@ -169,15 +170,28 @@ abstract class BrowserView implements BrowserViewInterface
     }
 
     /**
-     * @param array $code
+     * @param string $code
      *
      * @return static
      */
-    protected function addCode(array $code)
+    protected function addCode($code)
     {
         $this->getRenderer()->addAssetCode($code);
 
         return $this;
+    }
+
+    /**
+     * @param FormView $formView
+     *
+     * @return static
+     */
+    protected function addFormAssets(FormView $formView)
+    {
+        return $this
+            ->addCssForm($formView->getCssAssets())
+            ->addJsForm($formView->getJsAssets())
+            ->addCodeForm($formView->getCodeAssets());
     }
 
     /**
@@ -202,6 +216,48 @@ abstract class BrowserView implements BrowserViewInterface
     private function addJs($path, $blockId = null)
     {
         $this->getRenderer()->addAssetJs($path, $blockId);
+
+        return $this;
+    }
+
+    /**
+     * @param array $paths
+     *
+     * @return static
+     */
+    private function addCssForm(array $paths)
+    {
+        foreach ($paths as $path)
+        {
+            $this->addCss($path, 'form');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $paths
+     *
+     * @return static
+     */
+    private function addJsForm(array $paths)
+    {
+        foreach ($paths as $path)
+        {
+            $this->addJs($path, 'form');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return static
+     */
+    private function addCodeForm($code)
+    {
+        $this->getRenderer()->addAssetCode($code, 'form');
 
         return $this;
     }

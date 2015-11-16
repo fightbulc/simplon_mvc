@@ -12,19 +12,13 @@ use Simplon\Mvc\Utils\CastAway;
 use Simplon\Mvc\Views\Browser\FlashMessage;
 
 ?>
-<div class="tiny-screen-container small-screen-container">
-    <?= $content ?>
+<div class="nav-section-tabs ui top attached <?= CastAway::intToColumnWord(count($tabs)) ?> item tabular menu">
+    <?php foreach ($tabs as $id => $tab): ?>
+        <a href="<?= $tab['url'] ?>" class="item <?= $id === $activeTabId ? 'active' : null ?>">
+            <?= $tab['label'] ?>
+        </a>
+    <?php endforeach ?>
 </div>
-
-<div class="big-screen-container">
-    <div class="ui top attached <?= CastAway::intToColumnWord(count($tabs)) ?> item tabular menu">
-        <?php foreach ($tabs as $id => $tab): ?>
-            <a href="<?= $tab['url'] ?>" class="item <?= $id === $activeTabId ? 'active' : null ?>">
-                <?= $tab['label'] ?>
-            </a>
-        <?php endforeach ?>
-    </div>
-    <div class="ui bottom attached segment">
-        <?= $content ?>
-    </div>
+<div class="nav-section-content ui bottom attached segment">
+    <?= $content ?>
 </div>
