@@ -21,6 +21,26 @@ trait TimeAwareTrait
     protected $updatedAt;
 
     /**
+     * @return static
+     */
+    public function beforeSave()
+    {
+        $this->setCreatedAt(time())->setUpdatedAt(time());
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function beforeUpdate()
+    {
+        $this->setUpdatedAt(time());
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getCreatedAt()
