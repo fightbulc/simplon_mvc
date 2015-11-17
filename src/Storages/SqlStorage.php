@@ -47,15 +47,17 @@ abstract class SqlStorage implements CrudStorageInterface
 
     /**
      * @param array $conds
+     * @param array $sorting
      *
      * @return null|CrudModelInterface[]
      */
-    public function crudRead(array $conds)
+    public function crudRead(array $conds = [], array $sorting = [])
     {
         $cursor = $this->getCrud()->read(
             (new ReadQueryBuilder())
                 ->setTableName($this->getTableName())
                 ->setConds($conds)
+                ->setSorting($sorting)
         );
 
         if ($cursor === null)
