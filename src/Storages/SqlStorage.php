@@ -5,6 +5,7 @@ namespace Simplon\Mvc\Storages;
 use Simplon\Mysql\Crud\CrudManager;
 use Simplon\Mysql\Crud\CrudModelInterface;
 use Simplon\Mysql\Crud\CrudStorageInterface;
+use Simplon\Mysql\Mysql;
 use Simplon\Mysql\MysqlException;
 use Simplon\Mysql\MysqlQueryIterator;
 use Simplon\Mysql\QueryBuilder\CreateQueryBuilder;
@@ -19,16 +20,23 @@ use Simplon\Mysql\QueryBuilder\UpdateQueryBuilder;
 abstract class SqlStorage implements CrudStorageInterface
 {
     /**
+     * @var Mysql
+     */
+    private $mysql;
+
+    /**
      * @var CrudManager
      */
     protected $crud;
 
     /**
+     * @param Mysql $mysql
      * @param CrudManager $crudManager
      */
-    public function __construct(CrudManager $crudManager)
+    public function __construct(Mysql $mysql, CrudManager $crudManager)
     {
         $this->crud = $crudManager;
+        $this->mysql = $mysql;
     }
 
     /**
@@ -144,6 +152,14 @@ abstract class SqlStorage implements CrudStorageInterface
         }
 
         return $models;
+    }
+
+    /**
+     * @return Mysql
+     */
+    protected function getMysql()
+    {
+        return $this->mysql;
     }
 
     /**
