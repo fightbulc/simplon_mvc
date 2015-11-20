@@ -7,6 +7,9 @@ use Simplon\Mvc\Responses\BrowserRedirect;
 use Simplon\Mvc\Responses\BrowserResponse;
 use Simplon\Mvc\Storages\SessionStorage;
 use Simplon\Mvc\Views\Browser\FlashMessage;
+use Simplon\Mvc\Views\Browser\Navigation\NavigationHiddenView;
+use Simplon\Mvc\Views\Browser\Navigation\NavigationItemView;
+use Simplon\Mvc\Views\Browser\Navigation\NavigationSideView;
 
 /**
  * Interface BrowserControllerInterface
@@ -33,6 +36,21 @@ interface BrowserControllerInterface
      * @return Locale
      */
     public function getLocale();
+
+    /**
+     * @return NavigationItemView[]
+     */
+    public function getNavigationMain();
+
+    /**
+     * @return NavigationHiddenView[]
+     */
+    public function getNavigationHidden();
+
+    /**
+     * @return NavigationSideView[]
+     */
+    public function getNavigationSide();
 
     /**
      * @return FlashMessage

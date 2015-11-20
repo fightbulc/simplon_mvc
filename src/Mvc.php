@@ -18,6 +18,9 @@ use Simplon\Mvc\Responses\BrowserRedirect;
 use Simplon\Mvc\Responses\BrowserResponse;
 use Simplon\Mvc\Responses\RestResponse;
 use Simplon\Mvc\Utils\Config;
+use Simplon\Mvc\Views\Browser\Navigation\NavigationHiddenView;
+use Simplon\Mvc\Views\Browser\Navigation\NavigationMainView;
+use Simplon\Mvc\Views\Browser\Navigation\NavigationSideView;
 use Simplon\Request\Request;
 
 /**
@@ -58,6 +61,21 @@ class Mvc
     private $errorObserver;
 
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * @var string
+     */
+    private $localeCode;
+
+    /**
+     * @var ComponentRegistryInterface[]
+     */
+    private $components;
+
+    /**
      * @var Events
      */
     private $events;
@@ -68,21 +86,31 @@ class Mvc
     private $routes;
 
     /**
-     * @var Request
+     * @var NavigationMainView[]
      */
-    private $request;
+    private $navigationMain = [];
 
     /**
-     * @var string
+     * @var NavigationHiddenView[]
      */
-    private $localeId;
+    private $navigationHidden = [];
 
     /**
-     * @param ErrorObserver $errorObserver
+     * @var NavigationSideView[]
+     */
+    private $navigationSide = [];
+
+    /**
      * @param ComponentRegistryInterface[] $components
+     * @param ErrorObserver $errorObserver
      */
-    public function __construct(ErrorObserver $errorObserver, array $components)
+    public function __construct(array $components, ErrorObserver $errorObserver = null)
     {
+        if ($errorObserver === null)
+        {
+            $errorObserver = new ErrorObserver(ErrorObserver::RESPONSE_HTML);
+        }
+
         $this->errorObserver = $errorObserver->observe();
 
         $this->request = new Request();
@@ -133,6 +161,22 @@ class Mvc
     }
 
     /**
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return new Request();
+    }
+
+    /**
+     * @return Events
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
      * @return Mvc
      */
     public function initConfig()
@@ -161,13 +205,13 @@ class Mvc
     }
 
     /**
-     * @param string $pathComponent
+     * @param string $componentRootPath
      *
      * @return Mvc
      */
-    public function mergeComponentConfig($pathComponent)
+    public function mergeComponentConfig($componentRootPath)
     {
-        $pathComponentParts = explode('/', $pathComponent);
+        $pathComponentParts = explode('/', $componentRootPath);
         $componentName = array_pop($pathComponentParts);
 
         $path = 'Components/' . $componentName . '/Configs';
@@ -187,40 +231,32 @@ class Mvc
     }
 
     /**
-     * @return Request
-     */
-    public function getRequest()
-    {
-        return new Request();
-    }
-
-    /**
      * @return string
      */
-    public function getLocaleId()
+    public function getLocaleCode()
     {
-        return $this->localeId;
+        return $this->localeCode;
     }
 
     /**
-     * @param string $localeId
+     * @param string $localeCode
      *
      * @return Mvc
      */
-    public function setLocaleId($localeId)
+    public function setLocaleCode($localeCode)
     {
-        $this->localeId = $localeId;
+        $this->localeCode = $localeCode;
 
         return $this;
     }
 
     /**
-     * @param string $pathComponent
+     * @param string $componentRootPath
      *
      * @return Locale
      * @throws ServerException
      */
-    public function mergeComponentLocale($pathComponent)
+    public function mergeComponentLocale($componentRootPath)
     {
         $meta = null;
 
@@ -253,7 +289,7 @@ class Mvc
                     ];
                 }
 
-                $pathComponentParts = explode('/', $pathComponent);
+                $pathComponentParts = explode('/', $componentRootPath);
                 $componentName = array_pop($pathComponentParts);
 
                 $paths = [
@@ -278,57 +314,17 @@ class Mvc
     }
 
     /**
-     * @return Events
-     */
-    public function getEvents()
-    {
-        return $this->events;
-    }
-
-    /**
-     * @param ComponentRegistryInterface $registry
-     *
-     * @return Mvc
-     */
-    public function addComponent(ComponentRegistryInterface $registry)
-    {
-        $this->addRoutes($registry->registerRoutes());
-
-        if (method_exists($registry, 'registerEvents'))
-        {
-            $events = $registry->registerEvents($this);
-
-            if ($events !== null)
-            {
-                $pushes = $events->registerPushes();
-
-                if ($pushes)
-                {
-                    $this->addEventPushes($pushes);
-                }
-
-                $pulls = $events->registerPulls();
-
-                if ($pulls)
-                {
-                    $this->addEventPulls($pulls);
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @param ComponentRegistryInterface[] $components
      *
      * @return Mvc
      */
     public function setComponents(array $components)
     {
+        $this->components = $components;
+
         foreach ($components as $registry)
         {
-            $this->addComponent($registry);
+            $this->registerComponent($registry);
         }
 
         return $this;
@@ -390,6 +386,9 @@ class Mvc
                 // handle placeholder
                 $params = $this->handleRoutePlaceholders($placeholders, $params);
 
+                // inject components navigation
+                $this->registerComponentsNavigation();
+
                 // handle request/response
                 return $this->handleRequest($route, $params);
             }
@@ -399,18 +398,129 @@ class Mvc
     }
 
     /**
-     * @param string $addToPath
-     *
-     * @return string
+     * @return NavigationHiddenView[]|null
      */
-    private function getPathApp($addToPath = null)
+    public function getNavigationHidden()
     {
-        if (isset($addToPath))
+        return $this->navigationHidden;
+    }
+
+    /**
+     * @return NavigationMainView[]|null
+     */
+    public function getNavigationMain()
+    {
+        return $this->navigationMain;
+    }
+
+    /**
+     * @return NavigationSideView[]|null
+     */
+    public function getNavigationSide()
+    {
+        return $this->navigationSide;
+    }
+
+    /**
+     * @param ComponentRegistryInterface $registry
+     *
+     * @return Mvc
+     */
+    private function registerComponent(ComponentRegistryInterface $registry)
+    {
+        $this->addRoutes($registry->registerRoutes());
+
+        $events = $registry->registerEvents($this);
+
+        if ($events !== null)
         {
-            return $this->pathApp . '/' . CastAway::trimPath($addToPath);
+            $pushes = $events->registerPushes();
+
+            if ($pushes)
+            {
+                $this->addEventPushes($pushes);
+            }
+
+            $pulls = $events->registerPulls();
+
+            if ($pulls)
+            {
+                $this->addEventPulls($pulls);
+            }
         }
 
-        return $this->pathApp;
+        return $this;
+    }
+
+    /**
+     * @return Mvc
+     */
+    private function registerComponentsNavigation()
+    {
+        foreach ($this->components as $registry)
+        {
+            $this->addMainNavigation(
+                $registry->registerMainNavigation($this)
+            );
+
+            $this->addHiddenNavigation(
+                $registry->registerHiddenNavigation($this)
+            );
+
+            $this->addSideNavigation(
+                $registry->registerSideNavigation($this)
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param NavigationMainView|null $nav
+     *
+     * @return Mvc
+     */
+    private function addMainNavigation(NavigationMainView $nav = null)
+    {
+        if ($nav)
+        {
+            $this->navigationMain[$nav->getPosition()] = $nav;
+            ksort($this->navigationMain);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param NavigationHiddenView|null $nav
+     *
+     * @return Mvc
+     */
+    private function addHiddenNavigation(NavigationHiddenView $nav = null)
+    {
+        if ($nav)
+        {
+            $this->navigationHidden[$nav->getPosition()] = $nav;
+            ksort($this->navigationHidden);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param NavigationSideView|null $nav
+     *
+     * @return Mvc
+     */
+    private function addSideNavigation(NavigationSideView $nav = null)
+    {
+        if ($nav)
+        {
+            $this->navigationSide[$nav->getPosition()] = $nav;
+            ksort($this->navigationSide);
+        }
+
+        return $this;
     }
 
     /**
@@ -524,7 +634,7 @@ class Mvc
             switch ($placeholder)
             {
                 case self::ROUTE_PLACEHOLDER_LOCALE:
-                    $this->setLocaleId($params[$index]);
+                    $this->setLocaleCode($params[$index]);
                     unset($params[$index]);
                     break;
 
@@ -599,6 +709,21 @@ class Mvc
         }
 
         throw (new ServerException())->internalError(['class' => get_class($response)]);
+    }
+
+    /**
+     * @param string $addToPath
+     *
+     * @return string
+     */
+    private function getPathApp($addToPath = null)
+    {
+        if (isset($addToPath))
+        {
+            return $this->pathApp . '/' . CastAway::trimPath($addToPath);
+        }
+
+        return $this->pathApp;
     }
 
     /**

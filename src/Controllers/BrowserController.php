@@ -30,8 +30,11 @@ abstract class BrowserController implements BrowserControllerInterface
     public function respond(BrowserViewInterface $view)
     {
         $params = [
-            'flash'  => $this->getFlashMessage(),
-            'locale' => $this->getLocale(),
+            'flash'            => $this->getFlashMessage(),
+            'locale'           => $this->getLocale(),
+            'navigationMain'   => $this->getNavigationMain(),
+            'navigationHidden' => $this->getNavigationHidden(),
+            'navigationSide'   => $this->getNavigationSide(),
         ];
 
         return new BrowserResponse(
