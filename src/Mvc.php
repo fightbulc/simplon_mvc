@@ -428,11 +428,15 @@ class Mvc
      */
     private function registerComponent(ComponentRegistryInterface $registry)
     {
-        $this->addRoutes($registry->registerRoutes());
-
+        $routes = $registry->registerRoutes();
         $events = $registry->registerEvents($this);
 
-        if ($events !== null)
+        if ($routes)
+        {
+            $this->addRoutes($routes);
+        }
+
+        if ($events)
         {
             $pushes = $events->registerPushes();
 
