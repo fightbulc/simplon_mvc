@@ -64,7 +64,7 @@ abstract class SqlStorage implements CrudStorageInterface
         $cursor = $this->getCrud()->read(
             (new ReadQueryBuilder())
                 ->setTableName($this->getTableName())
-                ->setConds($conds)
+                ->setConditions($conds)
                 ->setSorting($sorting)
         );
 
@@ -86,7 +86,7 @@ abstract class SqlStorage implements CrudStorageInterface
         $data = $this->getCrud()->readOne(
             (new ReadQueryBuilder())
                 ->setTableName($this->getTableName())
-                ->setConds($conds)
+                ->setConditions($conds)
         );
 
         if ($data === null)
