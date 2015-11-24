@@ -259,4 +259,49 @@ class CastAway
 
         return $word;
     }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    public function arrayInt(array $data)
+    {
+        foreach ($data as $k => $v)
+        {
+            $data[$k] = self::toInt($v);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    public function arrayString(array $data)
+    {
+        foreach ($data as $k => $v)
+        {
+            $data[$k] = self::toString($v);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    public function arrayFloat(array $data)
+    {
+        foreach ($data as $k => $v)
+        {
+            $data[$k] = self::toFloat($v);
+        }
+
+        return $data;
+    }
 }
