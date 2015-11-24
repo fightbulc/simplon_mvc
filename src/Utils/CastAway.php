@@ -265,7 +265,7 @@ class CastAway
      *
      * @return array
      */
-    public function arrayInt(array $data)
+    public static function toArrayInt(array $data)
     {
         foreach ($data as $k => $v)
         {
@@ -280,7 +280,7 @@ class CastAway
      *
      * @return array
      */
-    public function arrayString(array $data)
+    public static function toArrayString(array $data)
     {
         foreach ($data as $k => $v)
         {
@@ -295,7 +295,7 @@ class CastAway
      *
      * @return array
      */
-    public function arrayFloat(array $data)
+    public static function toArrayFloat(array $data)
     {
         foreach ($data as $k => $v)
         {
