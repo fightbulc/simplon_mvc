@@ -3,7 +3,7 @@
 namespace Simplon\Mvc;
 
 use Simplon\Mvc\Utils\Events\Events;
-use Simplon\Mvc\Storages\SessionStorage;
+use Simplon\Mvc\Store\SessionStore;
 use Simplon\Mvc\Utils\Config;
 use Simplon\Mvc\Views\Browser\Navigation\NavigationHiddenView;
 use Simplon\Mvc\Views\Browser\Navigation\NavigationItemView;
@@ -70,11 +70,11 @@ trait ContextTrait
     }
 
     /**
-     * @return SessionStorage
+     * @return SessionStore
      */
-    public function getSessionStorage()
+    public function getSessionStore()
     {
-        return new SessionStorage();
+        return new SessionStore();
     }
 
     /**

@@ -1,14 +1,14 @@
 <?php
 
-namespace Simplon\Mvc\Storages;
+namespace Simplon\Mvc\Store;
 
-use Simplon\Mvc\Interfaces\SessionStorageInterface;
+use Simplon\Mvc\Interfaces\SessionStoreInterface;
 
 /**
- * Class SessionStorage
- * @package Simplon\Mvc\Storages
+ * Class SessionStore
+ * @package Simplon\Mvc\Store
  */
-class SessionStorage implements SessionStorageInterface
+class SessionStore implements SessionStoreInterface
 {
     /**
      * @param int $sessionTimeoutSeconds

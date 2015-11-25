@@ -3,10 +3,10 @@
 namespace Simplon\Mvc\Interfaces;
 
 /**
- * Interface SessionStorageInterface
+ * Interface SessionStoreInterface
  * @package Simplon\Mvc\Interfaces
  */
-interface SessionStorageInterface
+interface SessionStoreInterface
 {
     /**
      * @param string $key

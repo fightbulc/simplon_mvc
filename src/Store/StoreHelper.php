@@ -1,20 +1,20 @@
 <?php
 
-namespace Simplon\Mvc\Storages;
+namespace Simplon\Mvc\Store;
 
 use Simplon\Mvc\Utils\SecurityUtil;
-use Simplon\Mysql\Crud\CrudStorageInterface;
+use Simplon\Mysql\Crud\CrudStoreInterface;
 
-class StorageHelper
+class StoreHelper
 {
     /**
-     * @param CrudStorageInterface $storage
+     * @param CrudStoreInterface $storage
      * @param int $length
      * @param string $prefix
      *
      * @return string
      */
-    public static function getUniquePubToken(CrudStorageInterface $storage, $length = 12, $prefix = null)
+    public static function getUniquePubToken(CrudStoreInterface $storage, $length = 12, $prefix = null)
     {
         $token = null;
         $isUnique = false;

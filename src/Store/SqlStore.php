@@ -1,10 +1,10 @@
 <?php
 
-namespace Simplon\Mvc\Storages;
+namespace Simplon\Mvc\Store;
 
 use Simplon\Mysql\Crud\CrudManager;
 use Simplon\Mysql\Crud\CrudModelInterface;
-use Simplon\Mysql\Crud\CrudStorageInterface;
+use Simplon\Mysql\Crud\CrudStoreInterface;
 use Simplon\Mysql\Mysql;
 use Simplon\Mysql\MysqlException;
 use Simplon\Mysql\MysqlQueryIterator;
@@ -14,10 +14,10 @@ use Simplon\Mysql\QueryBuilder\ReadQueryBuilder;
 use Simplon\Mysql\QueryBuilder\UpdateQueryBuilder;
 
 /**
- * Class SqlStorage
- * @package Simplon\Mvc\Storages
+ * Class SqlStore
+ * @package Simplon\Mvc\Store
  */
-abstract class SqlStorage implements CrudStorageInterface
+abstract class SqlStore implements CrudStoreInterface
 {
     /**
      * @var Mysql

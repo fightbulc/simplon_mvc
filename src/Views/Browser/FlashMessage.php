@@ -2,7 +2,7 @@
 
 namespace Simplon\Mvc\Views\Browser;
 
-use Simplon\Mvc\Interfaces\SessionStorageInterface;
+use Simplon\Mvc\Interfaces\SessionStoreInterface;
 
 /**
  * Class FlashMessage
@@ -17,16 +17,16 @@ class FlashMessage
     const TYPE_ERROR = 'error';
 
     /**
-     * @var SessionStorageInterface
+     * @var SessionStoreInterface
      */
-    private $sessionStorage;
+    private $sessionStore;
 
     /**
-     * @param SessionStorageInterface $sessionStorage
+     * @param SessionStoreInterface $sessionStorage
      */
-    public function __construct(SessionStorageInterface $sessionStorage)
+    public function __construct(SessionStoreInterface $sessionStorage)
     {
-        $this->sessionStorage = $sessionStorage;
+        $this->sessionStore = $sessionStorage;
     }
 
     /**
@@ -34,7 +34,7 @@ class FlashMessage
      */
     public function hasFlash()
     {
-        return $this->getSessionStorage()->has(self::SESSION_KEY);
+        return $this->getSessionStore()->has(self::SESSION_KEY);
     }
 
     /**
@@ -43,10 +43,10 @@ class FlashMessage
     public function getFlash()
     {
         // fetch message
-        $flash = $this->getSessionStorage()->get(self::SESSION_KEY);
+        $flash = $this->getSessionStore()->get(self::SESSION_KEY);
 
         // remove from session
-        $this->getSessionStorage()->del(self::SESSION_KEY);
+        $this->getSessionStore()->del(self::SESSION_KEY);
 
         if ($flash === null)
         {
@@ -114,14 +114,14 @@ class FlashMessage
      */
     private function setFlash($message, $type = null)
     {
-        return $this->getSessionStorage()->set(self::SESSION_KEY, ['message' => $message, 'type' => $type]);
+        return $this->getSessionStore()->set(self::SESSION_KEY, ['message' => $message, 'type' => $type]);
     }
 
     /**
-     * @return SessionStorageInterface
+     * @return SessionStoreInterface
      */
-    private function getSessionStorage()
+    private function getSessionStore()
     {
-        return $this->sessionStorage;
+        return $this->sessionStore;
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Simplon\Mvc\Storages;
+namespace Simplon\Mvc\Store;
 
 use Simplon\Mvc\Utils\CastAway;
 
 /**
  * Class TimeAwareTrait
- * @package Simplon\Mvc\Storages
+ * @package Simplon\Mvc\Store
  */
 trait TimeAwareTrait
 {

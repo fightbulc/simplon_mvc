@@ -69,7 +69,7 @@ abstract class BrowserController implements BrowserControllerInterface
         if ($this->flashMessage === null)
         {
             $this->flashMessage = new FlashMessage(
-                $this->getSessionStorage()
+                $this->getSessionStore()
             );
         }
 

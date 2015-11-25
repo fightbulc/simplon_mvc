@@ -1,9 +1,13 @@
 <?php
 
+$appRootPath = __DIR__ . '/../../..';
+
 if (getenv('APP_ENV') !== 'dev')
 {
     $autoloadFiles = [];
-    $pathAutoloadFiles = __DIR__ . '/../../../composer/autoload_files.php';
+
+    /** @noinspection PhpIncludeInspection */
+    $pathAutoloadFiles = $appRootPath . '/composer/autoload_files.php';
 
     if (file_exists($pathAutoloadFiles))
     {
@@ -20,7 +24,8 @@ if (getenv('APP_ENV') !== 'dev')
         }
     }
 
-    $classmap = require __DIR__ . '/../../..//composer/autoload_classmap.php';
+    /** @noinspection PhpIncludeInspection */
+    $classmap = require $appRootPath . '/composer/autoload_classmap.php';
 
     spl_autoload_register(
         function ($class) use ($classmap)
@@ -32,5 +37,6 @@ if (getenv('APP_ENV') !== 'dev')
 }
 else
 {
-    require __DIR__ . '/../../../autoload.php';
+    /** @noinspection PhpIncludeInspection */
+    require $appRootPath . '/autoload.php';
 }

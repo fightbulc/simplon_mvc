@@ -5,7 +5,7 @@ namespace Simplon\Mvc\Interfaces;
 use Simplon\Locale\Locale;
 use Simplon\Mvc\Responses\BrowserRedirect;
 use Simplon\Mvc\Responses\BrowserResponse;
-use Simplon\Mvc\Storages\SessionStorage;
+use Simplon\Mvc\Store\SessionStore;
 use Simplon\Mvc\Views\Browser\FlashMessage;
 use Simplon\Mvc\Views\Browser\Navigation\NavigationHiddenView;
 use Simplon\Mvc\Views\Browser\Navigation\NavigationItemView;
@@ -58,7 +58,7 @@ interface BrowserControllerInterface
     public function getFlashMessage();
 
     /**
-     * @return SessionStorage
+     * @return SessionStore
      */
-    public function getSessionStorage();
+    public function getSessionStore();
 }
