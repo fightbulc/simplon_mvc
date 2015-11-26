@@ -13,27 +13,30 @@ trait SerializationTrait
      *
      * @return static
      */
-    public function fromArray(array $data)
+    public function fromArray(array $data = null)
     {
-        foreach ($data as $fieldName => $val)
+        if($data)
         {
-            // format field name
-            if (strpos($fieldName, '_') !== false)
+            foreach ($data as $fieldName => $val)
             {
-                $fieldName = self::camelCaseString($fieldName);
+                // format field name
+                if (strpos($fieldName, '_') !== false)
+                {
+                    $fieldName = self::camelCaseString($fieldName);
+                }
+
+                $setMethodName = 'set' . ucfirst($fieldName);
+
+                // set by setter
+                if (method_exists($this, $setMethodName))
+                {
+                    $this->$setMethodName($val);
+                    continue;
+                }
+
+                // set directly on field
+                $this->$fieldName = $val;
             }
-
-            $setMethodName = 'set' . ucfirst($fieldName);
-
-            // set by setter
-            if (method_exists($this, $setMethodName))
-            {
-                $this->$setMethodName($val);
-                continue;
-            }
-
-            // set directly on field
-            $this->$fieldName = $val;
         }
 
         return $this;
