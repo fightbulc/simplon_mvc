@@ -338,7 +338,7 @@ class Mvc
      */
     public function dispatch($requestedRoute = null)
     {
-        $requestedRoute = $_SERVER['SERVER_NAME'] . rtrim($requestedRoute ?: $_SERVER['PATH_INFO'], '/');
+        $requestedRoute = $_SERVER['HTTP_HOST'] . rtrim($requestedRoute ?: $_SERVER['PATH_INFO'], '/');
         $requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
 
         foreach ($this->getRoutes() as $route)
