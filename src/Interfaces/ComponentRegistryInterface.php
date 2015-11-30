@@ -15,35 +15,32 @@ use Simplon\Mvc\Views\Browser\Navigation\NavigationSideView;
 interface ComponentRegistryInterface
 {
     /**
+     * @param Mvc $mvc
+     */
+    public function __construct(Mvc $mvc);
+
+    /**
      * @return Route[]|null
      */
     public function registerRoutes();
 
     /**
-     * @param Mvc $mvc
-     *
      * @return ComponentEventsInterface|null
      */
-    public function registerEvents(Mvc $mvc);
+    public function registerEvents();
 
     /**
-     * @param Mvc $mvc
-     *
      * @return NavigationMainView|null
      */
-    public function registerMainNavigation(Mvc $mvc);
+    public function registerMainNavigation();
 
     /**
-     * @param Mvc $mvc
-     *
      * @return NavigationHiddenView|null
      */
-    public function registerHiddenNavigation(Mvc $mvc);
+    public function registerHiddenNavigation();
 
     /**
-     * @param Mvc $mvc
-     *
      * @return NavigationSideView|null
      */
-    public function registerSideNavigation(Mvc $mvc);
+    public function registerSideNavigation();
 }
