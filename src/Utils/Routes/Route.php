@@ -18,7 +18,7 @@ class Route
     /**
      * @var string
      */
-    private $domain;
+    private $module;
 
     /**
      * @var string
@@ -46,15 +46,15 @@ class Route
     private $requestMethod;
 
     /**
-     * @param string $domain
+     * @param string $module
      * @param string $pattern
      * @param string $controller
      * @param string $method
      * @param string $requestMethod
      */
-    public function __construct($domain, $pattern, $controller, $method, $requestMethod = null)
+    public function __construct($module, $pattern, $controller, $method, $requestMethod = null)
     {
-        $this->domain = $domain;
+        $this->module = $module;
         $this->pattern = $pattern;
         $this->controller = $controller;
         $this->method = $method;
@@ -68,21 +68,19 @@ class Route
     /**
      * @return string
      */
-    public function getDomain()
+    public function getModule()
     {
-        return CastAway::trimPath(
-            strtolower($this->domain)
-        );
+        return $this->module;
     }
 
     /**
-     * @param string $domain
+     * @param string $module
      *
      * @return Route
      */
-    public function setDomain($domain)
+    public function setModule($module)
     {
-        $this->domain = $domain;
+        $this->module = $module;
 
         return $this;
     }
