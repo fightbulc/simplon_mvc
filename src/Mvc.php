@@ -71,7 +71,7 @@ class Mvc
     private $localeCode;
 
     /**
-     * @var ComponentRegistryInterface[]
+     * @var string[]
      */
     private $components;
 
@@ -101,7 +101,7 @@ class Mvc
     private $navigationSide = [];
 
     /**
-     * @param ComponentRegistryInterface[] $components
+     * @param string[] $components
      * @param ErrorObserver $errorObserver
      */
     public function __construct(array $components, ErrorObserver $errorObserver = null)
@@ -314,17 +314,17 @@ class Mvc
     }
 
     /**
-     * @param ComponentRegistryInterface[] $components
+     * @param string[] $components
      *
      * @return Mvc
      */
     public function setComponents(array $components)
     {
-        $this->components = $components;
-
-        foreach ($components as $registry)
+        foreach ($components as $className)
         {
-            $this->registerComponent($registry);
+            $this->registerComponent(
+                new $className($this)
+            );
         }
 
         return $this;
@@ -338,7 +338,7 @@ class Mvc
      */
     public function dispatch($requestedRoute = null)
     {
-        $requestedRoute = $_SERVER['HTTP_HOST'] . rtrim($requestedRoute ?: $_SERVER['PATH_INFO'], '/');
+        $requestedRoute = rtrim($requestedRoute ?: $_SERVER['PATH_INFO'], '/');
         $requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
 
         foreach ($this->getRoutes() as $route)
@@ -363,7 +363,11 @@ class Mvc
             }
 
             // handle controller matching
-            if (preg_match_all('#^' . $route->getDomain() . $route->getPattern() . '/*$#i', $requestedRoute, $match, PREG_SET_ORDER))
+            $isMatchingRoute =
+                $this->getModule() === $route->getModule() &&
+                preg_match_all('#^' . $route->getPattern() . '/*$#i', $requestedRoute, $match, PREG_SET_ORDER);
+
+            if ($isMatchingRoute)
             {
                 // handle request method restrictions
                 if ($route->hasRequestMethod() && $route->getRequestMethod() !== $requestMethod)
@@ -428,8 +432,10 @@ class Mvc
      */
     private function registerComponent(ComponentRegistryInterface $registry)
     {
+        $this->components[] = $registry;
+
         $routes = $registry->registerRoutes();
-        $events = $registry->registerEvents($this);
+        $events = $registry->registerEvents();
 
         if ($routes)
         {
@@ -464,15 +470,15 @@ class Mvc
         foreach ($this->components as $registry)
         {
             $this->addMainNavigation(
-                $registry->registerMainNavigation($this)
+                $registry->registerMainNavigation()
             );
 
             $this->addHiddenNavigation(
-                $registry->registerHiddenNavigation($this)
+                $registry->registerHiddenNavigation()
             );
 
             $this->addSideNavigation(
-                $registry->registerSideNavigation($this)
+                $registry->registerSideNavigation()
             );
         }
 
@@ -575,14 +581,14 @@ class Mvc
     {
         foreach ($routes as $route)
         {
-            $patternHash = md5($route->getDomain() . $route->getPattern() . $route->getRequestMethod());
+            $patternHash = md5($route->getModule() . $route->getPattern() . $route->getRequestMethod());
 
             if (isset($this->routes[$patternHash]))
             {
                 throw (new ServerException())->internalError(
                     [
                         'reason'        => 'Component is trying to redeclare existing route',
-                        'domain'        => $route->getDomain(),
+                        'domain'        => $route->getModule(),
                         'pattern'       => $route->getPattern(),
                         'requestMethod' => $route->getRequestMethod(),
                         'controller'    => $route->getController(),
