@@ -11,14 +11,19 @@ use Simplon\Locale\Locale;
 use Simplon\Mvc\Utils\CastAway;
 use Simplon\Mvc\Views\Browser\FlashMessage;
 
+$tabCount = count($tabs);
 ?>
-<div class="nav-section-tabs ui top attached <?= CastAway::intToColumnWord(count($tabs)) ?> item tabular menu">
-    <?php foreach ($tabs as $id => $tab): ?>
-        <a href="<?= $tab['url'] ?>" class="item <?= $id === $activeTabId ? 'active' : null ?>">
-            <?= $tab['label'] ?>
-        </a>
-    <?php endforeach ?>
-</div>
+
+<?php if ($tabCount > 1): ?>
+    <div class="nav-section-tabs ui top attached <?= CastAway::intToColumnWord($tabCount) ?> item tabular menu">
+        <?php foreach ($tabs as $id => $tab): ?>
+            <a href="<?= $tab['url'] ?>" class="item <?= $id === $activeTabId ? 'active' : null ?>">
+                <?= $tab['label'] ?>
+            </a>
+        <?php endforeach ?>
+    </div>
+<?php endif ?>
+
 <div class="nav-section-content ui bottom attached segment">
     <?= $content ?>
 </div>
