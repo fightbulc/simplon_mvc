@@ -63,7 +63,7 @@ abstract class SqlStore implements CrudStoreInterface
     {
         $cursor = $this->getCrud()->read(
             (new ReadQueryBuilder())
-                ->setTableName($this->getTableName())
+                ->setFrom($this->getTableName())
                 ->setConditions($conds)
                 ->setSorting($sorting)
         );
@@ -85,7 +85,7 @@ abstract class SqlStore implements CrudStoreInterface
     {
         $data = $this->getCrud()->readOne(
             (new ReadQueryBuilder())
-                ->setTableName($this->getTableName())
+                ->setFrom($this->getTableName())
                 ->setConditions($conds)
         );
 
