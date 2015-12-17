@@ -12,14 +12,19 @@ use Simplon\Mvc\Responses\RestResponse;
 interface RestControllerInterface
 {
     /**
+     * @return Locale
+     */
+    public function getLocale();
+
+    /**
+     * @return string
+     */
+    public function getLocaleCode();
+
+    /**
      * @param RestViewInterface $view
      *
      * @return RestResponse
      */
     public function respond(RestViewInterface $view);
-
-    /**
-     * @return Locale
-     */
-    public function getLocale();
 }

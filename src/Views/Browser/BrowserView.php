@@ -3,8 +3,8 @@
 namespace Simplon\Mvc\Views\Browser;
 
 use Simplon\Form\FormView;
+use Simplon\Locale\Locale;
 use Simplon\Mvc\Interfaces\BrowserViewInterface;
-use Simplon\Mvc\Interfaces\DataInterface;
 use Simplon\Mvc\Utils\CastAway;
 use Simplon\Mvc\Views\Browser\Helper\PageBrowserViewHelper;
 use Simplon\Template\Template;
@@ -18,34 +18,42 @@ abstract class BrowserView implements BrowserViewInterface
     /**
      * @var Template
      */
-    protected $renderer;
+    private $renderer;
 
     /**
-     * @var DataInterface
+     * @var Locale
      */
-    protected $data;
+    private $locale;
 
     /**
      * @var string
      */
-    protected $result;
+    private $result;
 
     /**
-     * @param DataInterface $data
+     * @return Locale
      */
-    public function __construct(DataInterface $data = null)
+    public function getLocale()
     {
-        $this->data = $data;
+        return $this->locale;
     }
 
     /**
-     * @param DataInterface $data
-     *
-     * @return static
+     * @return string
      */
-    public function setData(DataInterface $data)
+    public function getLocaleCode()
     {
-        $this->data = $data;
+        return $this->locale->getCurrentLocale();
+    }
+
+    /**
+     * @param Locale $locale
+     *
+     * @return BrowserViewInterface
+     */
+    public function setLocale(Locale $locale)
+    {
+        $this->locale = $locale;
 
         return $this;
     }

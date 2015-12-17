@@ -19,6 +19,19 @@ abstract class RestController implements RestControllerInterface
      */
     public function respond(RestViewInterface $view)
     {
-        return new RestResponse($view->build()->getResult());
+        return new RestResponse(
+            $view
+                ->setLocale($this->getLocale())
+                ->build()
+                ->getResult()
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocaleCode()
+    {
+        return $this->getLocale()->getCurrentLocale();
     }
 }

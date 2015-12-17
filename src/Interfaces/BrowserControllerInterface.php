@@ -38,6 +38,11 @@ interface BrowserControllerInterface
     public function getLocale();
 
     /**
+     * @return string
+     */
+    public function getLocaleCode();
+
+    /**
      * @return NavigationItemView[]
      */
     public function getNavigationMain();

@@ -38,7 +38,10 @@ abstract class BrowserController implements BrowserControllerInterface
         ];
 
         return new BrowserResponse(
-            $view->build($params)->getResult()
+            $view
+                ->setLocale($this->getLocale())
+                ->build($params)
+                ->getResult()
         );
     }
 
@@ -59,6 +62,14 @@ abstract class BrowserController implements BrowserControllerInterface
         }
 
         return new BrowserRedirect($url, $hasMovedCode);
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocaleCode()
+    {
+        return $this->getLocale()->getCurrentLocale();
     }
 
     /**
