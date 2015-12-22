@@ -35,11 +35,6 @@ interface RestViewInterface
     public function build(array $params = []);
 
     /**
-     * @return DataInterface
-     */
-    public function getData();
-
-    /**
      * @return array
      */
     public function getResult();
