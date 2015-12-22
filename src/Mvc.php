@@ -71,7 +71,7 @@ class Mvc
     private $localeCode;
 
     /**
-     * @var string[]
+     * @var ComponentRegistryInterface[]
      */
     private $components;
 
