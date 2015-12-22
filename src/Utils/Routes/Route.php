@@ -2,8 +2,6 @@
 
 namespace Simplon\Mvc\Utils\Routes;
 
-use Simplon\Mvc\Utils\CastAway;
-
 /**
  * Class Route
  * @package Simplon\Mvc\Utils\Routes
