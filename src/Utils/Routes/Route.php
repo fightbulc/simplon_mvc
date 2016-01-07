@@ -50,7 +50,7 @@ class Route
      * @param string $method
      * @param string $requestMethod
      */
-    public function __construct($module, $pattern, $controller, $method, $requestMethod = null)
+    public function __construct($module, $pattern, $controller, $method, $requestMethod = self::REQUEST_METHOD_GET)
     {
         $this->module = $module;
         $this->pattern = $pattern;
