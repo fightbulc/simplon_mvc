@@ -39,28 +39,16 @@ class Route
     private $callback;
 
     /**
-     * @var string
+     * @var array
      */
-    private $requestMethod;
+    private $requestMethods;
 
     /**
      * @param string $module
-     * @param string $pattern
-     * @param string $controller
-     * @param string $method
-     * @param string $requestMethod
      */
-    public function __construct($module, $pattern, $controller, $method, $requestMethod = self::REQUEST_METHOD_GET)
+    public function __construct($module)
     {
         $this->module = $module;
-        $this->pattern = $pattern;
-        $this->controller = $controller;
-        $this->method = $method;
-
-        if ($this->isAllowedRequestMethod($requestMethod))
-        {
-            $this->requestMethod = $requestMethod;
-        }
     }
 
     /**
@@ -69,18 +57,6 @@ class Route
     public function getModule()
     {
         return $this->module;
-    }
-
-    /**
-     * @param string $module
-     *
-     * @return Route
-     */
-    public function setModule($module)
-    {
-        $this->module = $module;
-
-        return $this;
     }
 
     /**
@@ -121,12 +97,14 @@ class Route
 
     /**
      * @param string $controller
+     * @param string $method
      *
      * @return Route
      */
-    public function setController($controller)
+    public function setController($controller, $method)
     {
         $this->controller = $controller;
+        $this->method = $method;
 
         return $this;
     }
@@ -140,23 +118,11 @@ class Route
     }
 
     /**
-     * @param string $method
-     *
-     * @return Route
+     * @return array
      */
-    public function setMethod($method)
+    public function getRequestMethods()
     {
-        $this->method = $method;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRequestMethod()
-    {
-        return strtoupper($this->requestMethod);
+        return $this->requestMethods;
     }
 
     /**
@@ -164,20 +130,45 @@ class Route
      */
     public function hasRequestMethod()
     {
-        return isset($this->requestMethod);
+        return isset($this->requestMethods);
     }
 
     /**
-     * @param string $requestMethod
-     *
      * @return Route
      */
-    public function setRequestMethod($requestMethod)
+    public function allowGet()
     {
-        if ($this->isAllowedRequestMethod($requestMethod))
-        {
-            $this->requestMethod = $requestMethod;
-        }
+        $this->requestMethods[] = self::REQUEST_METHOD_GET;
+
+        return $this;
+    }
+
+    /**
+     * @return Route
+     */
+    public function allowPost()
+    {
+        $this->requestMethods[] = self::REQUEST_METHOD_POST;
+
+        return $this;
+    }
+
+    /**
+     * @return Route
+     */
+    public function allowPut()
+    {
+        $this->requestMethods[] = self::REQUEST_METHOD_PUT;
+
+        return $this;
+    }
+
+    /**
+     * @return Route
+     */
+    public function allowDelete()
+    {
+        $this->requestMethods[] = self::REQUEST_METHOD_DELETE;
 
         return $this;
     }
@@ -200,22 +191,5 @@ class Route
         $this->callback = $callback;
 
         return $this;
-    }
-
-    /**
-     * @param string $method
-     *
-     * @return bool
-     */
-    private function isAllowedRequestMethod($method)
-    {
-        $validMethods = [
-            self::REQUEST_METHOD_GET,
-            self::REQUEST_METHOD_POST,
-            self::REQUEST_METHOD_PUT,
-            self::REQUEST_METHOD_DELETE,
-        ];
-
-        return in_array(strtoupper($method), $validMethods);
     }
 }

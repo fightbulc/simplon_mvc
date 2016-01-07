@@ -370,7 +370,7 @@ class Mvc
             if ($isMatchingRoute)
             {
                 // handle request method restrictions
-                if ($route->hasRequestMethod() && $route->getRequestMethod() !== $requestMethod)
+                if ($route->hasRequestMethod() && in_array($requestMethod, $route->getRequestMethods()) === false)
                 {
                     continue;
                 }
@@ -581,7 +581,7 @@ class Mvc
     {
         foreach ($routes as $route)
         {
-            $patternHash = md5($route->getModule() . $route->getPattern() . $route->getRequestMethod());
+            $patternHash = md5($route->getModule() . $route->getPattern() . join('', $route->getRequestMethods()));
 
             if (isset($this->routes[$patternHash]))
             {
@@ -590,7 +590,7 @@ class Mvc
                         'reason'        => 'Component is trying to redeclare existing route',
                         'domain'        => $route->getModule(),
                         'pattern'       => $route->getPattern(),
-                        'requestMethod' => $route->getRequestMethod(),
+                        'requestMethod' => $route->getRequestMethods(),
                         'controller'    => $route->getController(),
                         'method'        => $route->getMethod(),
                     ]
