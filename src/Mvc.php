@@ -196,15 +196,21 @@ class Mvc
 
         $path = 'Components/' . $componentName . '/Configs';
 
-        $this->getConfig()->merge(
-            self::loadFile($this->getPathApp($path . '/config.php'))
-        );
-
-        if ($this->getEnv() !== self::ENV_DEV)
+        if (file_exists($path))
         {
             $this->getConfig()->merge(
-                self::loadFile($path . '/' . $this->getEnv() . '/config.php')
+                self::loadFile($this->getPathApp($path . '/config.php'))
             );
+
+            $envPath = $path . '/' . $this->getEnv() . '/config.php';
+
+            if ($this->getEnv() !== self::ENV_DEV && file_exists($envPath))
+            {
+                $this->getConfig()->merge(
+                    self::loadFile($envPath)
+                );
+            }
+
         }
 
         return $this;
@@ -274,8 +280,14 @@ class Mvc
 
                 $paths = [
                     $this->getPathApp('Locales'),
-                    $this->getPathApp('Components/' . $componentName . '/Locales'),
                 ];
+
+                $componentPath = $this->getPathApp('Components/' . $componentName . '/Locales');
+
+                if (file_exists($componentPath))
+                {
+                    array_push($paths, $componentPath);
+                }
 
                 return new Locale(new FileReader($paths), $availableLocales);
             }
