@@ -35,7 +35,7 @@
     "simplon/error": "0.3.*",
     "simplon/form": "1.1.*",
     "simplon/doi": "0.3.*",
-    "robmorgan/phinx": "0.4.*",
+    "robmorgan/phinx": "0.5.*",
     "simplon/component_mvc": "0.0.*"
   },
   "config": {
