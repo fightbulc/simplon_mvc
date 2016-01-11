@@ -101,10 +101,12 @@ class Mvc
     private $navigationSide = [];
 
     /**
+     * @param string $env
+     * @param string $module
      * @param string[] $components
      * @param ErrorObserver $errorObserver
      */
-    public function __construct(array $components, ErrorObserver $errorObserver = null)
+    public function __construct($env, $module, array $components, ErrorObserver $errorObserver = null)
     {
         if ($errorObserver === null)
         {
@@ -113,6 +115,8 @@ class Mvc
 
         $this->errorObserver = $errorObserver->observe();
 
+        $this->env = $env;
+        $this->module = $module;
         $this->request = new Request();
         $this->events = new Events();
 
@@ -129,35 +133,11 @@ class Mvc
     }
 
     /**
-     * @param string $env
-     *
-     * @return Mvc
-     */
-    public function setEnv($env)
-    {
-        $this->env = $env;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getModule()
     {
         return $this->module;
-    }
-
-    /**
-     * @param string $module
-     *
-     * @return Mvc
-     */
-    public function setModule($module)
-    {
-        $this->module = $module;
-
-        return $this;
     }
 
     /**
@@ -336,7 +316,7 @@ class Mvc
      * @return string
      * @throws ClientException
      */
-    public function dispatch($requestedRoute = null)
+    public function run($requestedRoute = null)
     {
         $requestedRoute = rtrim($requestedRoute ?: $_SERVER['PATH_INFO'], '/');
         $requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
@@ -740,10 +720,16 @@ class Mvc
      * @param string $path
      *
      * @return mixed
+     * @throws ServerException
      */
     private static function loadFile($path)
     {
-        /** @noinspection PhpIncludeInspection */
-        return require $path;
+        if (file_exists($path))
+        {
+            /** @noinspection PhpIncludeInspection */
+            return require $path;
+        }
+
+        throw (new ServerException())->internalError(['reason' => 'Requested file "' . $path . '" does not exist']);
     }
 }
