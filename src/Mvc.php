@@ -193,13 +193,12 @@ class Mvc
     {
         $pathComponentParts = explode('/', $componentRootPath);
         $componentName = array_pop($pathComponentParts);
-
-        $path = 'Components/' . $componentName . '/Configs';
+        $path = $this->getPathApp('Components/' . $componentName . '/Configs');
 
         if (file_exists($path))
         {
             $this->getConfig()->merge(
-                self::loadFile($this->getPathApp($path . '/config.php'))
+                self::loadFile($path . '/config.php')
             );
 
             $envPath = $path . '/' . $this->getEnv() . '/config.php';
