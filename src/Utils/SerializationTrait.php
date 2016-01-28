@@ -15,7 +15,7 @@ trait SerializationTrait
      */
     public function fromArray(array $data = null)
     {
-        if($data)
+        if ($data)
         {
             foreach ($data as $fieldName => $val)
             {
@@ -76,6 +76,30 @@ trait SerializationTrait
         }
 
         return $result;
+    }
+
+    /**
+     * @param bool $snakeCase
+     *
+     * @return string
+     */
+    public function toJson($snakeCase = true)
+    {
+        return json_encode(
+            $this->toArray($snakeCase)
+        );
+    }
+
+    /**
+     * @param string $json
+     *
+     * @return static
+     */
+    public function fromJson($json)
+    {
+        return $this->fromArray(
+            json_decode($json, true)
+        );
     }
 
     /**
