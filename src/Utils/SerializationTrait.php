@@ -109,7 +109,7 @@ trait SerializationTrait
      */
     protected static function snakeCaseString($string)
     {
-        return strtolower(preg_replace('/([A-Z])/', '_\\1', $string));
+        return strtolower(preg_replace('/([A-Z1-9])/', '_\\1', $string));
     }
 
     /**
