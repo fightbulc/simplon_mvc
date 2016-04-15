@@ -28,4 +28,23 @@ class StoreHelper
 
         return $token;
     }
+
+    /**
+     * @param CrudStoreInterface $storage
+     *
+     * @return string
+     */
+    public static function getUniqueInviteToken(CrudStoreInterface $storage)
+    {
+        $token = null;
+        $isUnique = false;
+
+        while ($isUnique === false)
+        {
+            $token = SecurityUtil::createRandomToken(6);
+            $isUnique = $storage->crudReadOne(['invite_token' => $token]) === null;
+        }
+
+        return $token;
+    }
 }
