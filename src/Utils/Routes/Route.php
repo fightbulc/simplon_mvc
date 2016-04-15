@@ -97,11 +97,11 @@ class Route
 
     /**
      * @param string $controller
-     * @param string $method
+     * @param string|null $method
      *
      * @return Route
      */
-    public function setController($controller, $method)
+    public function setController($controller, $method = null)
     {
         $this->controller = $controller;
         $this->method = $method;

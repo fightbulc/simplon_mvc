@@ -658,7 +658,7 @@ class Mvc
         $method = $route->getMethod();
 
         return $this->handleResponse(
-            call_user_func_array([(new $controller($this)), $method], $params)
+            $method ? call_user_func_array([(new $controller($this)), $method], $params) : call_user_func_array(new $controller($this), $params)
         );
     }
 
