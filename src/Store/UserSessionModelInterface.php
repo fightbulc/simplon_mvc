@@ -1,6 +1,6 @@
 <?php
 
-namespace Store;
+namespace Simplon\Mvc\Store;
 
 /**
  * Interface UserSessionModelInterface

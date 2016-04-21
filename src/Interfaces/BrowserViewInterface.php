@@ -3,7 +3,7 @@
 namespace Simplon\Mvc\Interfaces;
 
 use Simplon\Locale\Locale;
-use Store\UserSessionModelInterface;
+use Simplon\Mvc\Store\UserSessionModelInterface;
 
 /**
  * Interface BrowserViewInterface

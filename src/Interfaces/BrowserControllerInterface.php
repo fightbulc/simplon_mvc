@@ -10,7 +10,7 @@ use Simplon\Mvc\Views\Browser\FlashMessage;
 use Simplon\Mvc\Views\Browser\Navigation\NavigationHiddenView;
 use Simplon\Mvc\Views\Browser\Navigation\NavigationItemView;
 use Simplon\Mvc\Views\Browser\Navigation\NavigationSideView;
-use Store\UserSessionModelInterface;
+use Simplon\Mvc\Store\UserSessionModelInterface;
 
 /**
  * Interface BrowserControllerInterface

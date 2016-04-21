@@ -8,7 +8,7 @@ use Simplon\Mvc\Interfaces\BrowserViewInterface;
 use Simplon\Mvc\Utils\CastAway;
 use Simplon\Mvc\Views\Browser\Helper\PageBrowserViewHelper;
 use Simplon\Template\Template;
-use Store\UserSessionModelInterface;
+use Simplon\Mvc\Store\UserSessionModelInterface;
 
 /**
  * Class BrowserView
