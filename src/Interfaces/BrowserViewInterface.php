@@ -3,6 +3,7 @@
 namespace Simplon\Mvc\Interfaces;
 
 use Simplon\Locale\Locale;
+use Store\UserSessionModelInterface;
 
 /**
  * Interface BrowserViewInterface
@@ -14,6 +15,11 @@ interface BrowserViewInterface
      * @return Locale
      */
     public function getLocale();
+
+    /**
+     * @return UserSessionModelInterface
+     */
+    public function getUserSessionModel();
 
     /**
      * @return string

@@ -8,6 +8,7 @@ use Simplon\Mvc\Interfaces\BrowserViewInterface;
 use Simplon\Mvc\Utils\CastAway;
 use Simplon\Mvc\Views\Browser\Helper\PageBrowserViewHelper;
 use Simplon\Template\Template;
+use Store\UserSessionModelInterface;
 
 /**
  * Class BrowserView
@@ -24,6 +25,11 @@ abstract class BrowserView implements BrowserViewInterface
      * @var Locale
      */
     private $locale;
+
+    /**
+     * @var UserSessionModelInterface
+     */
+    private $userSessionModel;
 
     /**
      * @var string
@@ -54,6 +60,26 @@ abstract class BrowserView implements BrowserViewInterface
     public function setLocale(Locale $locale)
     {
         $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * @return UserSessionModelInterface
+     */
+    public function getUserSessionModel()
+    {
+        return $this->userSessionModel;
+    }
+
+    /**
+     * @param UserSessionModelInterface $model
+     *
+     * @return BrowserView
+     */
+    public function setUserSessionModel(UserSessionModelInterface $model = null)
+    {
+        $this->userSessionModel = $model;
 
         return $this;
     }
