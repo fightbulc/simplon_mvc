@@ -17,11 +17,6 @@ interface BrowserViewInterface
     public function getLocale();
 
     /**
-     * @return UserSessionModelInterface
-     */
-    public function getUserSessionModel();
-
-    /**
      * @return string
      */
     public function getLocaleCode();
@@ -32,6 +27,18 @@ interface BrowserViewInterface
      * @return BrowserViewInterface
      */
     public function setLocale(Locale $locale);
+
+    /**
+     * @return UserSessionModelInterface
+     */
+    public function getUserSessionModel();
+
+    /**
+     * @param UserSessionModelInterface $model
+     *
+     * @return BrowserViewInterface
+     */
+    public function setUserSessionModel(UserSessionModelInterface $model = null);
 
     /**
      * @param array $params

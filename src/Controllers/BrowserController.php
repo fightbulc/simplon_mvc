@@ -40,6 +40,7 @@ abstract class BrowserController implements BrowserControllerInterface
         return new BrowserResponse(
             $view
                 ->setLocale($this->getLocale())
+                ->setUserSessionModel($this->getUserSessionModel())
                 ->build($params)
                 ->getResult()
         );

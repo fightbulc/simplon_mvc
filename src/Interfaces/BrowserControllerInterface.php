@@ -10,6 +10,7 @@ use Simplon\Mvc\Views\Browser\FlashMessage;
 use Simplon\Mvc\Views\Browser\Navigation\NavigationHiddenView;
 use Simplon\Mvc\Views\Browser\Navigation\NavigationItemView;
 use Simplon\Mvc\Views\Browser\Navigation\NavigationSideView;
+use Store\UserSessionModelInterface;
 
 /**
  * Interface BrowserControllerInterface
@@ -61,6 +62,11 @@ interface BrowserControllerInterface
      * @return FlashMessage
      */
     public function getFlashMessage();
+
+    /**
+     * @return UserSessionModelInterface
+     */
+    public function getUserSessionModel();
 
     /**
      * @return SessionStore
