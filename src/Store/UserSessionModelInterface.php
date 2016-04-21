@@ -31,6 +31,11 @@ interface UserSessionModelInterface
     /**
      * @return string
      */
+    public function getEmail();
+
+    /**
+     * @return string
+     */
     public function getRole();
 
     /**
