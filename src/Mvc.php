@@ -108,13 +108,6 @@ class Mvc
      */
     public function __construct($env, $module, array $components, ErrorObserver $errorObserver = null)
     {
-        if ($errorObserver === null)
-        {
-            $errorObserver = new ErrorObserver(ErrorObserver::RESPONSE_HTML);
-        }
-
-        $this->errorObserver = $errorObserver->observe();
-
         $this->env = $env;
         $this->module = $module;
         $this->request = new Request();
