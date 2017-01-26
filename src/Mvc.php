@@ -11,8 +11,8 @@ use Simplon\Mvc\Utils\Events\PullEvent;
 use Simplon\Mvc\Utils\Events\Events;
 use Simplon\Mvc\Utils\Routes\Route;
 use Simplon\Error\ErrorObserver;
-use Simplon\Error\Exceptions\ClientException;
-use Simplon\Error\Exceptions\ServerException;
+use Simplon\Mvc\Utils\Exceptions\ClientException;
+use Simplon\Mvc\Utils\Exceptions\ServerException;
 use Simplon\Locale\Locale;
 use Simplon\Mvc\Responses\BrowserRedirect;
 use Simplon\Mvc\Responses\BrowserResponse;
@@ -54,11 +54,6 @@ class Mvc
      * @var Config
      */
     private $config;
-
-    /**
-     * @var ErrorObserver
-     */
-    private $errorObserver;
 
     /**
      * @var Request
@@ -104,7 +99,9 @@ class Mvc
      * @param string $env
      * @param string $module
      * @param string[] $components
-     * @param ErrorObserver $errorObserver
+     * @param ErrorObserver|null $errorObserver
+     *
+     * @throws ServerException
      */
     public function __construct($env, $module, array $components, ErrorObserver $errorObserver = null)
     {
@@ -150,7 +147,8 @@ class Mvc
     }
 
     /**
-     * @return Mvc
+     * @return $this
+     * @throws ServerException
      */
     public function initConfig()
     {
@@ -180,7 +178,8 @@ class Mvc
     /**
      * @param string $componentRootPath
      *
-     * @return Mvc
+     * @return $this
+     * @throws ServerException
      */
     public function mergeComponentConfig($componentRootPath)
     {
@@ -289,7 +288,7 @@ class Mvc
             $meta = $e->getMessage();
         }
 
-        throw (new ServerException)->internalError(
+        throw (new ServerException())->internalError(
             [
                 'reason' => 'Could not read locale information.',
                 'meta'   => $meta,
@@ -300,7 +299,8 @@ class Mvc
     /**
      * @param string[] $components
      *
-     * @return Mvc
+     * @return $this
+     * @throws ServerException
      */
     public function setComponents(array $components)
     {
@@ -315,10 +315,11 @@ class Mvc
     }
 
     /**
-     * @param string $requestedRoute
+     * @param string|null $requestedRoute
      *
      * @return string
      * @throws ClientException
+     * @throws ServerException
      */
     public function run($requestedRoute = null)
     {
@@ -412,7 +413,8 @@ class Mvc
     /**
      * @param ComponentRegistryInterface $registry
      *
-     * @return Mvc
+     * @return $this
+     * @throws ServerException
      */
     private function registerComponent(ComponentRegistryInterface $registry)
     {
@@ -644,6 +646,7 @@ class Mvc
      * @param array $params
      *
      * @return string
+     * @throws ServerException
      */
     private function handleRequest(Route $route, array $params)
     {

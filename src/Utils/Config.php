@@ -2,7 +2,7 @@
 
 namespace Simplon\Mvc\Utils;
 
-use Simplon\Error\Exceptions\ServerException;
+use Simplon\Mvc\Utils\Exceptions\ServerException;
 
 /**
  * Class Config
