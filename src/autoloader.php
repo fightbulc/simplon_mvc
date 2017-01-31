@@ -30,8 +30,11 @@ if (getenv('APP_ENV') !== 'dev')
     spl_autoload_register(
         function ($class) use ($classmap)
         {
-            /** @noinspection PhpIncludeInspection */
-            require $classmap[$class];
+            if(!empty($classmap[$class]))
+            {
+                /** @noinspection PhpIncludeInspection */
+                require $classmap[$class];
+            }
         }
     );
 }
