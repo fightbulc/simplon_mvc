@@ -2,11 +2,13 @@
 
 namespace Simplon\Mvc\Utils\Exceptions;
 
+use Simplon\Interfaces\ErrorExceptionInterface;
+
 /**
  * Class ErrorException
  * @package Simplon\Mvc\Utils\Exceptions
  */
-abstract class ErrorException extends \Exception
+abstract class ErrorException extends \Exception implements ErrorExceptionInterface
 {
     /**
      * @var int

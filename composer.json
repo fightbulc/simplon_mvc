@@ -36,7 +36,8 @@
     "simplon/form": "1.2.*",
     "simplon/doi": "0.3.*",
     "robmorgan/phinx": "^0.7",
-    "simplon/component_mvc": "0.0.*"
+    "simplon/component_mvc": "0.0.*",
+    "simplon/interfaces": "^0.0.3"
   },
   "config": {
     "component-dir": "public/assets/vendor"
