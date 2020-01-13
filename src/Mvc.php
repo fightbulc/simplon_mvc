@@ -31,7 +31,7 @@ class Mvc
 {
     const ENV_DEV = 'dev';
     const ENV_STAGING = 'staging';
-    const ENV_PRODUCTION = 'production';
+    const ENV_PRODUCTION = 'prod';
     const MODULE_DEFAULT = 'app';
     const ROUTE_PLACEHOLDER_LOCALE = 'locale';
 
