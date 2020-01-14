@@ -737,6 +737,6 @@ class Mvc
             return require $path;
         }
 
-        throw (new ServerException())->internalError(['reason' => 'Requested file "' . $path . '" does not exist']);
+        return [];
     }
 }
